@@ -1,0 +1,5 @@
+The nlmeU packacge 
+
+http://cran.r-project.org/web/packages/nlmeU/nlmeU.pdf
+
+Title Datasets and utility functions enhancing functionality of nlme package
