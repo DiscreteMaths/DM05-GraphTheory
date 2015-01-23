@@ -9,3 +9,11 @@ The form argument gives considerable flexibility in the type of plot specificati
 A conditioning expression (on the right side of a | operator) always implies that different panels are used 
 for each level of the conditioning factor, according to a Trellis display.
 
+## Not run: 
+fm1 <- lme(distance ~ age, Orthodont, random = ~ age | Subject)
+# normal plot of standardized residuals by gender
+qqnorm(fm1, ~ resid(., type = "p") | Sex, abline = c(0, 1))
+# normal plots of random effects
+qqnorm(fm1, ~ranef(.))
+
+## End(Not run)
