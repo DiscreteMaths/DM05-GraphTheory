@@ -1,3 +1,53 @@
+
+%======================================================%
+% Page 276
+
+14.2 Representation of a postive-definitematrix ; the pdMat Class.
+
+Positivedefinite classes are represented in the nlme package by objects inheriting from the \texttt{pdMat} class.
+
+\begin{description}
+\item[\texttt{pdIdent}] A mutliple of the Identity Matrix
+\item[\texttt{CompSymm}] Compound Symmetry
+\item[\texttt{pdNatural}] 
+\item[\texttt{pdSymm}]
+\item[\texttt{pdBlocked}]
+\item[\texttt{odDiag}] A diagonal matrix
+\end{description}
+
+
+The constructor Function, used to create or to modify objects that inherit from a particular class, is named after the corresponding class.
+
+For example \texttt{pdDiag()} function creates an object of the class \texttt{pdDiag}.
+
+The \texttt{pdMat} constructors are primarily used in the specification of the random effects structure of an LME model, with the help of the random argument of the model-fitting function \texttt{lme()}.
+
+%======================================================%
+% PaGE 277
+
+Arguments of the constructor function
+
+\texttt{value},\texttt{form},\texttt{name} and \texttt{data}.
+
+%======================================================%
+%Page 283 - Random effects structure representation - the \texttt{reStruct} class
+
+
+%======================================================%
+% Page 284
+Constructor function for the \texttt{Restruct}class.
+
+The function \texttt{Restruct} is a constructor function for an object of class \texttt{reStruct}.
+The arguments for the function are \texttt{object},\texttt{pdClass},\texttt{REML}, \texttt{data},\texttt{x},\texttt{Sigma},\texttt{reEstimates} and \texttt{verbose}.
+
+%======================================================%
+% Page 286
+% 14.3.2
+\subsection*{Inspecting and Modifying Objects of Class reStruct}
+
+\texttt{isInitialized()}
+\texttt{formula()}
+\texttt{getGroupsFormula()}.
 \section{Linear Mixed Effects Models}
 \subsection{Extracting Information from a Model-Fit Object of class lme.}
 % Page 293-295 Galecki
