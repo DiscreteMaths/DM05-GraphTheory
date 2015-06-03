@@ -1,3 +1,25 @@
+My search just now found no mention of Cook's distance or influenc 
+measures.  The closest I found was an unanswered question on this from 
+April 2003 (http://finzi.psych.upenn.edu/R/Rhelp02a/archive/4797.html).
+
+  Beyond that, there is an excellent discussion of "Examining a Fitted 
+Model" in Sec. 4.3 (pp. 174-197) of Pinheiro and Bates (2000) 
+Mixed-Effects Models in S and S-Plus (Springer).  Pinheiro and Bates 
+decided NOT to include plots of Cook's distance among the many 
+diagnostics they did provide.  However, 'plot(fit.lme)' plots 
+'standardized residuals' vs. predicted or 'fitted values'.  Wouldn't 
+points with large influence stand apart from the crowd in terms of 
+'fitted value'?
+
+	  Of course, there are many things other one could do to get at related 
+information, including reading the code for 'influence' and 'lme', and 
+figure out from that how to write an 'influence' method for an 'lme' 
+object.  However, that is far beyond what you asked and what I have time 
+now to disucss.
+
+%=================================================================================%
+
+
 %Page 80
 \[ D_i = \frac{ [ \mbox{var}(\hat{\beta})]^{-1} }{\mbox{rank}(\textbf{X}) \]
 
