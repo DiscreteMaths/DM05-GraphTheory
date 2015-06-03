@@ -1,3 +1,46 @@
+logLik1 Calculates contribution of one subject to the log-likelihood
+Description
+This function is generic; method functions can be written to handle specific classes of objects.
+Usage
+logLik1(modfit, dt1, dtInit)
+
+%======================================================================%
+
+
+simulateY Simulates values of the dependent variable based on a model fit
+Description
+This function is generic; method functions can be written to handle specific classes of objects.
+Usage
+simulateY(object, nsim = 1, seed = NULL, ...,
+verbose = FALSE, sigma)
+Arguments
+object an object with a model fit for which dependent variable is to be simulated.
+nsim number of simulations. nsim = 1 by default.
+seed integer scalar used to initiate random numbers generator.
+... some methods for this generic function may require additional arguments.
+verbose logical. If TRUE basic information about arguments is provided. By default set
+to FALSE.
+sigma numeric scalar. Allows to perform simulations employing alternative value of
+the scale parameter.
+Value
+numeric matrix. Number of columns determined by nsim argument.
+
+%=============================================================================%
+Pwr Calculates power based on a model fit
+Description
+This function is generic; method functions can be written to handle specific classes of objects.
+Usage
+Pwr(object, ...)
+Arguments
+object an object containing the results returned by a model fitting function (e.g., lme).
+... some methods for this generic function may require additional arguments.
+Value
+numeric scalar value.
+Author(s)
+Andrzej Galecki and Tomasz Burzykowski
+See Also
+Pwr.lme
+
 My search just now found no mention of Cook's distance or influenc 
 measures.  The closest I found was an unanswered question on this from 
 April 2003 (http://finzi.psych.upenn.edu/R/Rhelp02a/archive/4797.html).
