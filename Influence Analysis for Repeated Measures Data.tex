@@ -1,0 +1,310 @@
+Influence Analysis for Repeated Measures Data
+
+% - Influence Analysis for Repeated Measures Data
+
+October 6, 2013
+By Wingfeet
+
+
+
+
+
+
+
+
+
+
+ (This article was first published on Wiekvoet, and kindly contributed to R-bloggers)
+
+ I am trying exercise 59.8 (page 5057) of the SAS/STAT Users Guide 12.3 in R. The interesting thing is that influence is investigated on subject level rather than individual level. The diagnostics in nlme does not do leave-subject-out, at least, not that I know of. MCMCglm hardly has any diagnostics. This does not mean no validation is possible, this is R, programming is not optional, but rather expected. Hence with a little bit of work it is possible to estimate PRESS, Cook's D and effects on fixed effects. From this it follows extensive validation is possible, provided we can extract the underlying variables from the model fit object.
+
+Data
+Data is same as exercise 59.2 (exercise in R).
+r1 <- read.table(textConnection('
+1 F 21.0 20.0 21.5 23.0
+2 F 21.0 21.5 24.0 25.5
+3 F 20.5 24.0 24.5 26.0
+4 F 23.5 24.5 25.0 26.5
+5 F 21.5 23.0 22.5 23.5
+6 F 20.0 21.0 21.0 22.5
+7 F 21.5 22.5 23.0 25.0
+8 F 23.0 23.0 23.5 24.0
+9 F 20.0 21.0 22.0 21.5
+10 F 16.5 19.0 19.0 19.5
+11 F 24.5 25.0 28.0 28.0
+12 M 26.0 25.0 29.0 31.0
+13 M 21.5 22.5 23.0 26.5
+14 M 23.0 22.5 24.0 27.5
+15 M 25.5 27.5 26.5 27.0
+16 M 20.0 23.5 22.5 26.0
+17 M 24.5 25.5 27.0 28.5
+18 M 22.0 22.0 24.5 26.5
+19 M 24.0 21.5 24.5 25.5
+20 M 23.0 20.5 31.0 26.0
+21 M 27.5 28.0 31.0 31.5
+22 M 23.0 23.0 23.5 25.0
+23 M 21.5 23.5 24.0 28.0
+24 M 17.0 24.5 26.0 29.5
+25 M 22.5 25.5 25.5 26.0
+26 M 23.0 24.5 26.0 30.0
+27 M 22.0 21.5 23.5 25.0
+'),col.names=c('Person','Gender','Age8','Age10','Age12','Age14'),
+colClasses=c('factor','factor',rep('numeric',4)))
+rm <- reshape(r1,direction='long',
+    varying=list(c('Age8','Age10','Age12','Age14')),
+    timevar='Age',idvar=c('Person','Gender'),
+    v.names='y',
+    times=c(8,10,12,14))
+rm$Gender <- relevel(rm$Gender,ref='M')
+rm$fage=factor(rm$Age)
+rm$Person <- factor(rm$Person,levels=format(1:27,trim=TRUE))
+rm <- rm[order(rm$Person,rm$Age),]
+
+nlme
+
+Analysis, standard plot are not too difficult.
+
+
+lSymm <- lme(y ~  Age * Gender,
+
+    data=rm, random= list(Person =pdSymm(~ fage-1)),method='ML')
+
+
+
+
+plot(lSymm, resid(., type = "p") ~ Age | Person)
+
+
+
+
+
+
+Subject level influence
+
+I have chosen to display three items, PRESS, Cook's D and effect on fixed parameters. PRESS is reasonable straightforward, the numbers more or less match. Cook's D on the other hand, is not. I took the formula of the SAS/STAT guide, which calculated it, my wording, as Mahalanobis distance of leave-subject-out fixed parameters. However, the numbers don't match. Part of that may be that I do recalculate random parameters too. Compare my figure with Output 59.8.3 top left, this seems quite similar. 
+
+
+coefFulllme <- as.numeric(coef(lSymm)[1,1:4])
+
+VCMlme <- vcov(lSymm)
+
+lSymmLSO <- sapply(levels(rm$Person), function(x) {
+
+      rloo <- rm[rm$Person !=x,]
+
+      lSymm <- lme(y ~  Age * Gender,
+
+          data=rloo, random= list(Person =pdSymm(~ fage-1)),
+
+          method='ML')
+
+      coef <- as.numeric(coef(lSymm)[1,1:4])
+
+      genderF <- rm[rm$Person==x,'Gender'][1]=='F'
+
+      pred <- coef[1]+
+
+          c(8,10,12,14)*coef[2]+
+
+          genderF*coef[3]+
+
+          c(8,10,12,14)*coef[4]*genderF
+
+      obs <- rm[rm$Person ==x,'y']
+
+      CD=mahalanobis(coef,coefFulllme,VCMlme)/4
+
+      c(press=sum((obs-pred)^2),cd=CD,coef)
+
+    })
+
+lSymmLSO <- t(lSymmLSO)
+
+lSymmLSO[,c(1,2)]
+
+
+       press          cd
+
+1  10.323531 0.020169407
+
+2   3.839932 0.043571109
+
+3  10.899537 0.032741341
+
+4  24.050823 0.045570019
+
+5   1.690000 0.016239351
+
+6  11.866688 0.016490548
+
+7   1.191555 0.005405341
+
+8   4.678438 0.027992197
+
+9  13.488546 0.042166906
+
+10 85.581754 0.155169369
+
+11 68.465309 0.106829228
+
+12 39.449016 0.022192784
+
+13 12.920225 0.007427751
+
+14  6.119853 0.001987303
+
+15 26.126968 0.277545188
+
+16 21.065821 0.018968667
+
+17 10.050641 0.016763371
+
+18  7.800734 0.007611981
+
+19 15.196358 0.008490818
+
+20 43.256052 0.395086129
+
+21 96.107295 0.115497649
+
+22 13.879678 0.033635096
+
+23  4.961204 0.011979580
+
+24 41.758892 0.905440147
+
+25  4.643721 0.095851759
+
+26  8.019698 0.026621476
+
+27 19.920691 0.017942506
+
+
+plot(y=lSymmLSO[,2],x=1:27,main="Cook's D",xlab='Subject',type='h')
+
+
+
+
+Fixed-Effects Deletion Estimates
+
+Having done all the pre-work, the fixed effects deletion statistics are just a plot away.They do look slightly different from PROC MIXED as the model is a bit different in the SAS/STAT Guide.
+
+
+par(mfrow=c(2,2))
+
+dummy <- sapply(1:4,function(x) {
+
+  plot(y=lSymmLSO[,x+2],x=1:27,main=names(coef(lSymm))[x],ylab='',xlab='Subject')
+
+  abline(h=coefFulllme[x])
+
+})
+
+
+
+
+
+
+MCMCglm
+
+The model is easy enough to fit. The approach used in nlme is easy enough to convert. Only first 5 subject's data shown for brevity. 
+library(MCMCglmm)
+prior1 <- list(R=list(V=diag(4),nu=.01),
+    G=list(G1=list(V=diag(1),nu=.01) ))
+
+m1 <- MCMCglmm(y ~ Age* Gender , 
+    random= ~ Person ,
+    rcov=~ us(fage) :Person,
+    data=rm,family='gaussian',
+    nitt=500000,thin=20,burnin=50000,
+    verbose=FALSE
+ ,   prior=prior1
+)
+
+VCMM1 <- cov(m1$Sol)
+coefFullM1 <- colMeans(m1$Sol)
+
+
+m1LSO <- sapply(levels(rm$Person), function(x) {
+
+      rloo <- rm[rm$Person !=x,]
+
+      m1 <- MCMCglmm(y ~ Age* Gender , 
+
+          random= ~ Person ,
+
+          rcov=~ us(fage) :Person,
+
+          data=rloo,family='gaussian',
+
+     nitt=500000,thin=20,burnin=50000,
+
+          verbose=FALSE
+
+          ,   prior=prior1
+
+      )
+
+      coef <- colMeans(m1$Sol)
+
+      genderF <- rm[rm$Person==x,'Gender'][1]=='F'
+
+      pred <- coef[1]+
+
+          c(8,10,12,14)*coef[2]+
+
+          genderF*coef[3]+
+
+          c(8,10,12,14)*coef[4]*genderF
+
+      obs <- rm[rm$Person ==x,'y']
+
+      CD=mahalanobis(coefFullM1,coef,VCMM1)/4
+
+      c(press=sum((obs-pred)^2),cd=CD,coef)
+
+    })
+
+m1LSO <- t(m1LSO)
+
+m1LSO[1:5,1:2]
+
+
+
+      press         cd
+
+1 10.133019 0.01117458
+
+2  3.835048 0.03347745
+
+3 10.891120 0.02740768
+
+4 24.167881 0.03618814
+
+5  1.694508 0.01317537
+For both PRESS and Cook's D it is close. For completeness the plot.Not exactly the same, but the trend and interpretations are clear enough.
+
+plot(y=m1LSO[,2]*4,x=1:27,main="Cook's D",xlab='Subject',type='h')
+
+
+
+
+
+
+
+
+Fixed-Effects Deletion Estimates
+
+Following the template from nlme, the result is similar. 
+
+
+par(mfrow=c(2,2))
+
+dummy <- sapply(1:4,function(x) {
+
+      plot(y=m1LSO[,x+2],x=1:27,main=names(coefFullM1)[x],ylab='',xlab='Subject')
+
+      abline(h=coefFullM1[x])
+
+    })
+
