@@ -35,6 +35,8 @@ the models fitted by Roy's methodology fitted to the Blood data, as used in Blan
 %====================================================%
 \subsection{nlmeU R package}
 
+This monograph will use functions from the nlmeU package (Galecki and Burzykowski). This package consists of training datasets and utility functions enhancing functionality of nlme package.
+
 \begin{description}
 \item[logLik1.lme] Calculates contribution of one subject to the log-likelihood for lme
 object
@@ -49,21 +51,23 @@ object
 
 %--------------------------------------%
 \subsection{ARMD}
-Description
-Data from Age-Related Macular Degeneration (ARMD) clinical trial
+Galecki and Burzykowski use in their examples the ARMD data set, sata from Age-Related Macular Degeneration (ARMD) clinical trial. The ARMD data arise from a randomized multi-center clinical trial comparing an experimental treatment (interferon-alpha) versus placebo for patients diagnosed with ARMD.
 
-Details
-The ARMD data arise from a randomized multi-center clinical trial comparing an experimental treatment (interferon-alpha) versus placebo for patients diagnosed with ARMD.
 
+%====================================================================================%
+\newpage
 \section{Back Ground Materials}
+Galecki and Burzykowski revise several core topics before proceeding to introduce their proposed methodology.
+
+\subsection{Cook's Distance}
 %Page 80
 % \[ D_i = \frac{ [ \mbox{var}(\hat{\beta})]^{-1} }{\mbox{rank}(\textbf{X})} \]
 
 
-%===============================================%
+%====================================================================================%
 
-%Page 497 
-\section{20.3  Influence Diagnostics}
+%Page 497 - Section 20.3
+\section{Influence Diagnostics for lme objects.}
 
 \begin{itemize}
 \item Cook's Distance
@@ -73,13 +77,15 @@ The ARMD data arise from a randomized multi-center clinical trial comparing an e
 %------------%
 \subsection{Preparatory Steps}
 
-The \texttt{formula()} can recall the definition of the model defining the mean structure.
+\begin{itemize}
+\item The \texttt{formula()} can recall the definition of the model defining the mean structure.
 
-Auxillary Function \texttt{logLik1()} which is designed to calculate a contribution of a given subject to the overall likelihood for a given model.
+\item Auxillary Function \texttt{logLik1()} which is designed to calculate a contribution of a given subject to the overall likelihood for a given model.
 
-
-The number of degrees of freedom reported by loglik is equal to 8. This corresponds
+\item 
+The number of degrees of freedom reported by \texttt{loglik} is equal to 8. This corresponds
 to the total number of parameters in the model.
+\end{itemize}
 %--------------------------------------------%
 % Page 498 Top
 
