@@ -22,8 +22,7 @@
  %\pagestyle{fancy}
  \setmarginsrb{20mm}{0mm}{20mm}{25mm}{12mm}{11mm}{0mm}{11mm}
  %\lhead{MA4413 2013} \rhead{Mr. Kevin O'Brien}
- %\chead{Midterm Assessment 1 }
- %\input{tcilatex}
+
  
  \begin{document}
  	\tableofcontents
@@ -31,7 +30,22 @@
 %===================================================%
 \section{Introduction}
 In this section we aim to replicate the methods proposed by Galecki et al and transfer to them to the
-the models fitted by Roy's methodology fitted to the Blood data.
+the models fitted by Roy's methodology fitted to the Blood data, as used in Bland and Altman's papers.
+
+%====================================================%
+\subsection{nlmeU R package}
+
+\begin{description}
+\item[logLik1.lme] Calculates contribution of one subject to the log-likelihood for lme
+object
+
+\item[Pwr] Calculates power based on a model fit
+
+\item[sigma] Extract scale parameter sigma from a model fit
+
+\item[simulateY] Simulates values of the dependent variable based on a model fit
+
+\end{description}
 
 %--------------------------------------%
 \subsection{ARMD}
