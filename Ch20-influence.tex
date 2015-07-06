@@ -30,7 +30,7 @@
 
 
 %Page 80
-\[ D_i = \frac{ [ \mbox{var}(\hat{\beta})]^{-1} }{\mbox{rank}(\textbf{X}) \]
+% \[ D_i = \frac{ [ \mbox{var}(\hat{\beta})]^{-1} }{\mbox{rank}(\textbf{X})} \]
 
 
 %===============================================%
@@ -74,7 +74,7 @@ Part B
 \begin{framed}
 \begin{verbatim}
 
-beta0 <- fixef(fm16.5ml}
+beta0 <- fixef(fm16.5ml)
 
 beta0
 
@@ -86,22 +86,22 @@ vcovb
 %--------------------------------------------%
 % Page 498 Bottom
 
-We extract the $\textbf{\beta}$ estimates and their estimated variance covariance matrix.
+We extract the \textbf{$\beta$} estimates and their estimated variance covariance matrix.
 
-Towards this end, we use the functions \fixef) and vcov() respectively, we can save these estimates and the matrix as objects \texttt{beta0} and 
+Towards this end, we use the functions \texttt{fixef()} and \texttt{vcov()} respectively, we can save these estimates and the matrix as objects \texttt{beta0} and 
 \texttt{vcovb} respectively.
 
 With the help of the \texttt{abbreviate} function the names of the beta estimates are shortened to simplify the display of content.
 
 %--------------------------------------------%
 % Page 499 Top
-An auxillary function logLik1()
+An auxillary function \texttt{logLik1()}
 
 we used the \texttt{logLik()} function to obtain the value of the log-likelihood for the fitted model.
 It should be noted that the function returns the log-likelihood evaluated at the set of the
 
 
-The auxillary functon logLik1() has been included in the package nlmeU.
+The auxillary functon \texttt{logLik1()} has been included in the package nlmeU.
 
 estimated fixed effects and variance-covariance parameters and for the data set, to which the model
 is fitted. In the context of influence diagnostics, we need a more general function that allows
@@ -122,7 +122,7 @@ The dataframe provided in the argument \texttt{dt1} is typically created by choo
 However, in general, any pluasible fata for one subject , not necessarily from the dataset used to fit the model, can be used.
 
 
-The auxillary data provided in the argument dtInit is temporarily appended to the dt1 data. during the logLik() function execution.
+The auxillary data provided in the argument dtInit is temporarily appended to the dt1 data. during the \texttt{logLik()} function execution.
 
 
 
@@ -187,7 +187,7 @@ datasets and explore its contents.
 
 We define the function \texttt{lmeU()}, which fits the model to the data from the armd
 
-when the function lmeU() is executed, and LOO data frame, named dfU, is created with thesubject, indicated by the cx argument.
+when the function \texttt{lmeU()} is executed, and LOO data frame, named dfU, is created with thesubject, indicated by the cx argument.
 
 Subsequently model is fitted by dfI by applying the 
 
@@ -254,8 +254,8 @@ unique(dataU6$subject)[1:6]
 % PArt 20.3.2.2. Likelihood Distacnce for fitted Model
 Galecki presents the code used to calculate and plot individial likelihood displacements.
 
-For an LMM, it is required the computation of the full log-likelihood for $\hat{\textbf{\theta}}$, the ML estimate for 
-$\textbf{\theta}$ obtained by fitting the model to all data, and for $\hat{\textbf{\theta}}_(-i)$, the ML estimate obtained
+For an LMM, it is required the computation of the full log-likelihood for \textbf{$\hat{\theta}$}, the ML estimate for 
+\textbf{$\theta$} obtained by fitting the model to all data, and for \textbf{$\hat{\theta}_(-i)$}, the ML estimate obtained
 by fitting the model to the data with the $i-$th subject excluded.
 
 Note that both values of the log-likelihood, used in the definition of the likelihood displacement, should be 
@@ -264,11 +264,11 @@ calculated taking into account all observations.
 %---------%
 
 
-Galeck creates an auxillary function \textt{lLik()} which , for a given subject indicated by the main argument, extracts the lme model fit object for the
+Galeck creates an auxillary function \texttt{lLik()} which , for a given subject indicated by the main argument, extracts the lme model fit object for the
 corresponding LOO data.
 
 
-The corresponding log-likelihood function is extracted from the lmeU with the help of the logLik()
+The corresponding log-likelihood function is extracted from the lmeU with the help of the \texttt{logLik()}
 
 
 The returned value \texttt{lLikU + lLik.s} is the log-likelihood evaluated for all observations, using the displaced estimates of the model parameters.
@@ -359,7 +359,7 @@ The definition can be extended to the LMMs in a straightforward manner.
 
 Part 2 plot of cook's distance using traditional graphics
 
-# Annotation Component
+%%% Annotation Component
 
 \begin{framed}
 \begin{verbatim}
@@ -398,7 +398,7 @@ points()
 Cook's distance for the $beta$ estimates were defined bu 4.26 for the classical LM model.
 
 
-Next we compute the inverse of the variance covariance matrix \hat{\beta} using the solve() function.
+Next we compute the inverse of the variance covariance matrix $\hat{\beta}$ using the \texttt{solve()} function.
 We store the resulting matrix in the object \texttt{vb.inv}.
 
 Subsequently we define the function \texttt{cookDfun()} which, for a vector given in
@@ -414,12 +414,12 @@ is equivalent to the rank of the design matrix.
 % Page 507 all
 
 
-The outcome is stored in the vector \textt{cookD} and contains the values of cooks distanced for all subjects.
+The outcome is stored in the vector \texttt{cookD} and contains the values of cooks distanced for all subjects.
 
 We create the logical vector outD which indicates the subjects with cook's distance values that exceed 0.03.
 
 Present the scatterplot matrix of the two-dimensional projections of the differences.
-\[  \frac{\hat{\textbf{beta}_{(-i)} - \hat{\textbf{beta}} }{\hat{se}(\hat{beta})} \]
+% \[  \frac{\hat{\textbf{beta}_{(-i)} - \hat{\textbf{beta}} }{\hat{se}(\hat{beta})} \]
 for all pairs of the fixed-effects coefficients.
 
 %-------%
@@ -458,7 +458,7 @@ Towards this end, we have developed \texttt{simulateY()}, which can be used for 
 We note that the function is different from simulate.lme(), available in the nlme in that the latter returns
 simulation-based REML and/or ML values and not the value of the dependent variable.
 
-We demonstrate the use of the \texttt{simulateY()} function to create the empirical distribution of the \textbf{\beta} estimates.
+We demonstrate the use of the \texttt{simulateY()} function to create the empirical distribution of the \textbf{$\beta$} estimates.
 As an example, we consider the model which was fitted to the armd data.
 
 Note however that the presented syntax is fairly general can be used for other LMEs as well.
@@ -509,7 +509,7 @@ They are drawn from the marginal distribution of the dependent variable implied 
 
 It should be mentioned that the creation of the simYsumm list involves refitting the model many times, and it therefore takes a long time.
 
-Toward this end, with the help of the \texttt{sapply()} function, we extrac the vectors with the values of \hat{\beta} for each simulation for the list
+Toward this end, with the help of the \texttt{sapply()} function, we extrac the vectors with the values of $\hat{\beta}$ for each simulation for the list
 -object \texttt{simYsumm} and bind them column-wise into the \texttt{betaE}.
 
 Then we use the function \texttt{rowMeans()} to compute the mean values of the columns (i.e. accross the rows) of betaE.
