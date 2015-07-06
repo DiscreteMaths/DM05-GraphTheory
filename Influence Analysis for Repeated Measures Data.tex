@@ -1,3 +1,5 @@
+% - http://wiekvoet.blogspot.nl/2013/09/mixed-models-exercise-2-repeated.html
+
  \documentclass[a4paper,12pt]{article}
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \usepackage{eurosym}
@@ -56,6 +58,65 @@
 % By Wingfeet
 % (This article was first published on Wiekvoet, and kindly contributed to R-bloggers)
 
+\subsection{SAS Example 65.8: Influence Analysis for Repeated Measures Data}
+This example revisits the repeated measures data of Pothoff and Roy (1964) that were analyzed in Example
+65.2. Recall that the data consist of growth measurements at ages 8, 10, 12, and 14 for 11 girls and 16
+boys. The model being fit contains fixed effects for Gender and Age and their interaction.
+The earlier analysis of these data indicated some unusual observations in this data set. Because of the
+clustered data structure, it is of interest to study the influence of clusters (children) on the analysis rather than
+the influence of individual observations. A cluster comprises the repeated measurements for each child.
+The repeated measures are first modeled with an unstructured within-child variance-covariance matrix.
+A residual variance is not profiled in this model. A noniterative influence analysis will update the fixed
+effects only. The following statements request this noniterative maximum likelihood analysis and produce
+Output 65.8.1:
+
+\begin{verbatim}
+proc mixed data=pr method=ml;
+class person gender;
+model y = gender age gender*age /
+influence(effect=person);
+repeated / type=un subject=person;
+ods select influence;
+run;
+
+\end{verbatim}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{images/SASoutput}
+\caption{}
+\label{fig:SASoutput}
+\end{figure}
+
+Each observation in the “Influence Diagnostics for Levels of Person” table in Output 65.8.1 represents the
+removal of four observations. The subjects 10, 15, and 24 have the greatest impact on the fixed effects
+(Cook’s D), and subject 10 and 21 have large PRESS statistics. The 21st child has a large PRESS statistic,
+and its D statistic is not that extreme. This is an indication that the model fits rather poorly for this child,
+whether it is part of the data or not
+The previous analysis does not take into account the effect on the covariance parameters when a subject is
+removed from the analysis. If you also update the covariance parameters, the impact of observations on these
+can amplify or allay their effect on the fixed effects. To assess the overall influence of subjects on the analysis
+and to compute separate statistics for the fixed effects and covariance parameters, an iterative analysis is
+obtained by adding the INFLUENCE suboption ITER=, as follows:
+\begin{verbatim}
+
+ods graphics on;
+proc mixed data=pr method=ml;
+class person gender;
+model y = gender age gender*age /
+influence(effect=person iter=5);
+repeated / type=un subject=person;
+run;
+\end{verbatim}
+The number of additional iterations following removal of the observations for a particular subject is limited
+to five. Graphical displays of influence diagnostics are created when ODS Graphics is enabled. For
+general information about ODS Graphics, see Chapter 21, “Statistical Graphics Using ODS.” For specific
+information about the graphics available in the MIXED procedure, see the section “ODS Graphics” on
+page 5324.
+The MIXED procedure produces a plot of the restricted likelihood distance (Output 65.8.2) and a panel of
+diagnostics for fixed effects and covariance parameters (Output 65.8.3).
+\newpage
+
+\subsection{R Implementation}
  I am trying exercise 59.8 (page 5057) of the SAS/STAT Users Guide 12.3 in \texttt{R}. The interesting thing is that influence is investigated on subject level rather than individual level. The diagnostics in nlme does not do leave-subject-out, at least, not that I know of. MCMCglm hardly has any diagnostics. This does not mean no validation is possible, this is R, programming is not optional, but rather expected. Hence with a little bit of work it is possible to estimate PRESS, Cook's D and effects on fixed effects. From this it follows extensive validation is possible, provided we can extract the underlying variables from the model fit object.
 \newpage
 \subsection{Data}
