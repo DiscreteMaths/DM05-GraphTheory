@@ -77,6 +77,35 @@ Galecki and Burzykowski revise several core topics before proceeding to introduc
 %------------%
 \subsection{Preparatory Steps}
 
+\begin{framed}
+\begin{verbatim}
+###################################################
+### code chunk: Chap20.3influence_init
+###################################################
+
+options(width = 65, digits = 5, show.signif.stars = FALSE)
+date()
+packageVersion("nlmeU")
+packageVersion("nlme")
+packageVersion("lattice")
+
+sessionInfo()
+require(nlme)    
+require(lattice) 
+
+
+data(armd, package="nlmeU")
+
+## Model M16.5 
+lm3.form <-                 # (12.9, 16.17)
+formula(visual ~ visual0 + time + treat.f) 
+fm16.5  <-                  # R16.13
+lme(lm3.form,              
+random = list(subject = pdDiag(~time)),       
+weights =varPower(form=~time),
+data = armd)       
+\end{verbatim}
+\end{framed}
 
 \begin{verbatim}
 > summary(fm16.5)
@@ -133,59 +162,65 @@ to the total number of parameters in the model.
 Part A
 \begin{framed}
 \begin{verbatim}
- <- update(fm16.5)
-###################################################
-### code chunk: Chap20.3influence_init
-###################################################
+	### nlmeU code chunk: R20.6a
 
-options(width = 65, digits = 5, show.signif.stars = FALSE)
-date()
-packageVersion("nlmeU")
-packageVersion("nlme")
-packageVersion("lattice")
-
-sessionInfo()
-require(nlme)    
-require(lattice) 
-
-
-data(armd, package="nlmeU")
-
-## Model M16.5 
-lm3.form <-                 # (12.9, 16.17)
-formula(visual ~ visual0 + time + treat.f) 
-fm16.5  <-                  # R16.13
-lme(lm3.form,              
-random = list(subject = pdDiag(~time)),       
-weights =varPower(form=~time),
-data = armd)     
-
-
-
-
-
-
-  
-logLik()
+	fm16.5ml <- update(fm16.5, method = "ML") # ML estimation
+	formula(fm16.5ml)                         # Recall model formula.
+	fm16.5ml$call$data                        # Recall data name.
+	logLik(fm16.5ml)                          # Log-likelihood value
 \end{verbatim}
 \end{framed}
+
+\begin{verbatim}
+> fm16.5ml <- update(fm16.5, method = "ML") # ML estimation
+> formula(fm16.5ml)                         # Recall model formula.
+visual ~ visual0 + time + treat.f
+> fm16.5ml$call$data                        # Recall data name.
+armd
+> logLik(fm16.5ml)                          # Log-likelihood value
+'log Lik.' -3210.7 (df=8)
+\end{verbatim}
 
 %------%
 
 Part B
 
+
 \begin{framed}
-\begin{verbatim}
+	\begin{verbatim}
 
-beta0 <- fixef(fm16.5ml)
+	### code chunk: R20.6b
 
-beta0
-
-colnames(vcovb) <- names(beta0)
-vcovb
-
-\end{verbatim}
+	beta0  <- fixef(fm16.5ml)                 # beta
+	names(beta0)                              # Long names
+	names(beta0) <- abbreviate(names(beta0), minlength = 7) # Short names 
+	beta0                                     # beta printed.
+	vcovb  <- vcov(fm16.5ml)                  # vcovb 
+	colnames(vcovb) <- names(beta0)           # Short names
+	vcovb                                     # vcovb printed. 
+	
+	
+	\end{verbatim}
 \end{framed}
+
+\begin{verbatim}
+> beta0  <- fixef(fm16.5ml)                 # beta
+> names(beta0)                              # Long names
+[1] "(Intercept)"   "visual0"       "time"          "treat.fActive"
+> names(beta0) <- abbreviate(names(beta0), minlength = 7) # Short names 
+> beta0                                     # beta printed.
+(Intrc)  visual0     time  trt.fAc 
+5.44721  0.89973 -0.24155 -2.65638 
+> vcovb  <- vcov(fm16.5ml)                  # vcovb 
+> colnames(vcovb) <- names(beta0)           # Short names
+> vcovb                                     # vcovb printed. 
+(Intrc)     visual0        time     trt.fAc
+(Intercept)    5.0475640 -7.9651e-02 -3.8602e-03 -6.8078e-01
+visual0       -0.0796512  1.4407e-03  1.5213e-06  1.1239e-03
+time          -0.0038602  1.5213e-06  5.6988e-04 -6.1566e-05
+treat.fActive -0.6807838  1.1239e-03 -6.1566e-05  1.2568e+00
+\end{verbatim}
+\newpage
 %--------------------------------------------%
 % Page 498 Bottom
 
@@ -200,7 +235,7 @@ With the help of the \texttt{abbreviate} function the names of the beta estimate
 % Page 499 Top
 An auxillary function \texttt{logLik1()}
 
-we used the \texttt{logLik()} function to obtain the value of the log-likelihood for the fitted model.
+We used the \texttt{logLik()} function to obtain the value of the log-likelihood for the fitted model.
 It should be noted that the function returns the log-likelihood evaluated at the set of the
 
 
@@ -242,38 +277,6 @@ Contributions of Individual Subjects to the log-likelihood for fitted model
 % Page 500 top
 
 \begin{framed}
-\begin{verbatim}
-
-lLik.i <- as.vector(lLik.i)
-
-lLik.i[1:5]
-sum(lLik.i)
-
-\end{verbatim}
-\end{framed}
-%-------------------%
-
-Plot of individual contributions to the log-likelihood (traditional graphics)
-\begin{framed}
-\begin{verbatim}
-
-subject.c <-
-subject.x <- 
-plot()
-points()
-text()
-\end{verbatim}
-\end{framed}
-%--------------------------------------------%
-% Page 500 Bottom
-
-next we use the function \texttt{logLik1()} to compute the loglikelihood
-contributions for all subjects.
-
-\newpage
-
-
-\begin{framed}
 	\begin{verbatim}
 	###################################################
 	### code chunk: R20.7a
@@ -288,7 +291,39 @@ contributions for all subjects.
 	lLik.i[1:5]                   # logLik_i for the first five subjects
 	sum(lLik.i)                   # Sum logLik_i; compare to Panel 20.6a
 	
-	
+lLik.i <- as.vector(lLik.i)
+
+lLik.i[1:5]
+sum(lLik.i)
+
+\end{verbatim}
+\end{framed}
+\begin{verbatim}
+> df1 <- subset(armd, subject %in% "1")          # Data for subject "1" 
+> logLik1(fm16.5ml, df1)                         # logLik_i for subject "1" 
+[1] -6.6576
+> 
+> lLik.i <- by(armd, armd$subject,
++ FUN = function(dfi) logLik1(fm16.5ml, dfi))
+> lLik.i <- as.vector(lLik.i)   # Coerse array to vector  
+> lLik.i[1:5]                   # logLik_i for the first five subjects
+[1]  -6.6576 -13.4708 -11.1361 -13.3109 -12.9930
+> sum(lLik.i)                   # Sum logLik_i; compare to Panel 20.6a
+[1] -3210.7
+> 
+> lLik.i <- as.vector(lLik.i)
+> 
+> lLik.i[1:5]
+[1]  -6.6576 -13.4708 -11.1361 -13.3109 -12.9930
+> sum(lLik.i)
+[1] -3210.7
+
+\end{verbatim}
+%-------------------%
+
+Plot of individual contributions to the log-likelihood (traditional graphics)
+\begin{framed}
+\begin{verbatim}
 	
 	###################################################
 	### code chunk: R20.7b
@@ -304,26 +339,33 @@ contributions for all subjects.
 	points(subject.x[outL], lLik.n[outL], type = "p", pch = 16)
 	text(subject.x[outL], lLik.n[outL], subject.c[outL])
 	
-	
-	###################################################
-	### code chunk: R20.8a
-	###################################################
-	lmeU <- function(cx) { 
-	dfU <- subset(armd, subject != cx)          # LOO data 
-	update(fm16.5ml, data = dfU)                # LOO fit 
-	}
-	
-	lmeUall        <- lapply(subject.c, lmeU)       # List with LOO fits
-	names(lmeUall) <- subject.c                     # Names assigned          
-	
-	\end{verbatim}
+\end{verbatim}
 \end{framed}
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{images/Chap20-image2}
+\caption{}
+\label{fig:Chap20-image2}
+\end{figure}
+
+%--------------------------------------------%
+% Page 500 Bottom
+
+next we use the function \texttt{logLik1()} to compute the loglikelihood
+contributions for all subjects.
+
+\newpage
+
+
+
+	
+
 \newpage
 %--------------------------------------------%
 % Page 501 top
 
 We present the syntax to plot the per-observation individual log-likelihood contributions.
-First, with the help of the by() function, we create the array \texttt{nx} , which contains the number
+First, with the help of the \texttt{by()} function, we create the array \texttt{nx} , which contains the number
 of observations
 
 %--------------------------------------------%
@@ -345,14 +387,14 @@ when the function \texttt{lmeU()} is executed, and LOO data frame, named dfU, is
 Subsequently model is fitted by dfI by applying the 
 
 
-next, with the help of the function lapply(), we apply the lmeU() to the consecutive elements of the character vector subject.c.
+next, with the help of the function \texttt{lapply()}, we apply the \texttt{lmeU()} to the consecutive elements of the character vector subject.c.
 
 As a result, we obtain the list lmeUall, with lme-class model fit objects as elements. The model-fit objects contains the result of fitting model
 M16.5.
 %--------------------------------------------%
 % Page 502 All
 
-Finally, we name the components of the \texttt{lmeUall()} list using the subjects idenifier stored in the vector subject.c.
+Finally, we name the components of the \texttt{lmeUall()} list using the subjects idenifier stored in the vector \textit{subject.c}.
 
 This technique is computationally expensive, as it required the model to be fitted $m$ number of times, omitting one of the $m$ cases each time.
 
@@ -375,6 +417,24 @@ The extracted data frame is stored in the object \texttt{dataU6}. By using the f
 % Page 503 Top
 Model is fitted to a sequence of "leave-one-subject-out" out data sets.
 
+
+\begin{framed}
+	\begin{verbatim}	
+	
+	
+	###################################################
+	### code chunk: R20.8a
+	###################################################
+	lmeU <- function(cx) { 
+	dfU <- subset(armd, subject != cx)          # LOO data 
+	update(fm16.5ml, data = dfU)                # LOO fit 
+	}
+	
+	lmeUall        <- lapply(subject.c, lmeU)       # List with LOO fits
+	names(lmeUall) <- subject.c                     # Names assigned          
+	
+	\end{verbatim}
+\end{framed}
 
 \begin{framed}
 \begin{verbatim}
@@ -402,33 +462,6 @@ unique(dataU6$subject)[1:6]
 \end{verbatim}
 \end{framed}
 
-\begin{framed}
-	\begin{verbatim}
-	
-	###################################################
-	### code chunk: R20.6a
-	###################################################
-	fm16.5ml <- update(fm16.5, method = "ML") # ML estimation
-	formula(fm16.5ml)                         # Recall model formula.
-	fm16.5ml$call$data                        # Recall data name.
-	logLik(fm16.5ml)                          # Log-likelihood value
-	
-	
-	###################################################
-	### code chunk: R20.6b
-	###################################################
-	beta0  <- fixef(fm16.5ml)                 # beta
-	names(beta0)                              # Long names
-	names(beta0) <- abbreviate(names(beta0), minlength = 7) # Short names 
-	beta0                                     # beta printed.
-	vcovb  <- vcov(fm16.5ml)                  # vcovb 
-	colnames(vcovb) <- names(beta0)           # Short names
-	vcovb                                     # vcovb printed. 
-	
-	
-	\end{verbatim}
-\end{framed}
-\newpage
 
 %-------------------------------------------%
 % Page 503 and 504 Bottom
