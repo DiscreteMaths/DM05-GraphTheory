@@ -1,0 +1,21 @@
+
+```{r}
+JS.roy1LSO <- sapply(levels(dat$subject), function(x) {
+      datred <- dat[dat$subject !=x,]
+      JS.roy1 = lme(BP ~ method-1, data = datred,random = list(subject=pdSymm(~ method-1)), weights=varIdent(form=~1|method),correlation = corSymm(form=~1 | subject/repl), method="ML")
+      coef <- as.numeric(coef(JS.roy1)[1,])
+      # genderF <- rm[rm$Person==x,’Gender’][1]==’F’
+      # pred <- coef[1]+
+      #    c(8,10,12,14)*coef[2]+
+      #    genderF*coef[3]+
+      #    c(8,10,12,14)*coef[4]*genderF
+      # obs <- rm[rm$Person ==x,’y’]
+      CD=mahalanobis(coef,coefFulllme,VCMlme)/4
+      # c(press=sum((obs-pred)^2),cd=CD,coef)
+    })
+```
+
+```{r}
+JS.roy1LSO <- t(JS.roy1LSO)
+JS.roy1LSO[,c(1,2)]
+```
