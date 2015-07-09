@@ -7,7 +7,7 @@ output: html_document
 ```{r}
 #using package NLME
 library(nlme)
-source("BloodData.R")
+source("data/BloodData.R")
 ```
 
 ### Working on the JS comparison
