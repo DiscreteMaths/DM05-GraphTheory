@@ -325,6 +325,10 @@ names(dif.2Lik) <- subject.c              # Subjects' ids assigned
 outL  <-  dif.2Lik > 0.5                  # Outlying LDi's
 dif.2Lik[outL]
 library(lattice)
+
+```
+
+```{r}
 subject.f <- factor(subject.c, levels = subject.c)
 myPanel <- function(x, y, ...){
    x1 <- as.numeric(x)
