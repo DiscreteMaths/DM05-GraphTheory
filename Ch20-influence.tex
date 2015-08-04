@@ -79,9 +79,7 @@ Galecki and Burzykowski revise several core topics before proceeding to introduc
 
 \begin{framed}
 \begin{verbatim}
-###################################################
 ### code chunk: Chap20.3influence_init
-###################################################
 
 options(width = 65, digits = 5, show.signif.stars = FALSE)
 date()
@@ -278,9 +276,7 @@ Contributions of Individual Subjects to the log-likelihood for fitted model
 
 \begin{framed}
 	\begin{verbatim}
-	###################################################
 	### code chunk: R20.7a
-	###################################################
 	require(nlmeU)  
 	df1 <- subset(armd, subject %in% "1")          # Data for subject "1" 
 	logLik1(fm16.5ml, df1)                         # logLik_i for subject "1" 
@@ -325,9 +321,8 @@ Plot of individual contributions to the log-likelihood (traditional graphics)
 \begin{framed}
 \begin{verbatim}
 	
-	###################################################
 	### code chunk: R20.7b
-	###################################################
+
 	nx <- by(armd, armd$subject, nrow)             # ni
 	lLik.n <- lLik.i/as.vector(nx)                 # logLiki
 	outL <- lLik.n < -6                            # TRUE for values < -6
@@ -344,23 +339,18 @@ Plot of individual contributions to the log-likelihood (traditional graphics)
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{images/Chap20-image2}
-\caption{}
-\label{fig:Chap20-image2}
 \end{figure}
 
 %--------------------------------------------%
 % Page 500 Bottom
 
-next we use the function \texttt{logLik1()} to compute the loglikelihood
+next we use the function \texttt{logLik1()} to compute the log-likelihood
 contributions for all subjects.
 
 \newpage
 
 
 
-	
-
-\newpage
 %--------------------------------------------%
 % Page 501 top
 
@@ -420,11 +410,7 @@ Model is fitted to a sequence of "leave-one-subject-out" out data sets.
 
 \begin{framed}
 	\begin{verbatim}	
-	
-	
-	###################################################
-	### code chunk: R20.8a
-	###################################################
+### code chunk: R20.8a
 	lmeU <- function(cx) { 
 	dfU <- subset(armd, subject != cx)          # LOO data 
 	update(fm16.5ml, data = dfU)                # LOO fit 
@@ -478,7 +464,7 @@ calculated taking into account all observations.
 %---------%
 
 
-Galeck creates an auxillary function \texttt{lLik()} which , for a given subject indicated by the main argument, extracts the lme model fit object for the
+Galecki creates an auxillary function \texttt{lLik()} which , for a given subject indicated by the main argument, extracts the \texttt{lme} model fit object for the
 corresponding LOO data.
 
 
@@ -490,7 +476,7 @@ The returned value \texttt{lLikU + lLik.s} is the log-likelihood evaluated for a
 %------------------------------------------%
 % Page 504 Top
 
-Calculation of the likelihood displacement
+\subsection{Calculation of the likelihood displacement}
 
 \begin{framed}
 \begin{verbatim}
@@ -518,20 +504,21 @@ lLikUall <- apply(subject.c,lLik)
 
 \begin{framed}
 	\begin{verbatim}
-
-
-###################################################
 ### code chunk: R20.8b
-###################################################
+
 names(lmeUall)[1:6]                             
 dataU6 <- lmeUall[["6"]]$data     # LOO data for subject 6
 dim(dataU6)                       # Number of rows is 863
 unique(dataU6$subject)[1:6]       # Subject no. 6 omitted
 
+\end{verbatim}
+\end{framed}
 
-###################################################
+\begin{framed}
+	\begin{verbatim}
+
 ### code chunk: R20.9a
-###################################################
+
 lLik <- function(cx){                  
 	lmeU   <- lmeUall[[cx]]           # LOO fit extracted 
 	lLikU  <- logLik(lmeU, REML = FALSE)  # LOO log-likelihood
@@ -541,6 +528,7 @@ lLik <- function(cx){
 	return(lLikU + lLik.s)            # "Displaced" log-likelihood...
 }
 lLikUall <- sapply(subject.c, lLik)     # ...for all subjects.         
+
 
 dif.2Lik <- 2*(logLik(fm16.5ml) - lLikUall) # Vector of LDi
 summary(dif.2Lik)
@@ -598,9 +586,8 @@ The x-axis of the plot is constructed using numeric representation of the \textt
 \begin{framed}
 \begin{verbatim}
 
-###################################################
 ### code chunk: R20.9b
-###################################################
+
 names(dif.2Lik) <- subject.c              # Subjects' ids assigned
 outL  <-  dif.2Lik > 0.5                  # Outlying LDi's
 dif.2Lik[outL]
@@ -641,10 +628,8 @@ Part 2 plot of cook's distance using traditional graphics
 
 \begin{framed}
 	\begin{verbatim}
-
-###################################################
 ### code chunk: R20.10a
-###################################################
+
 betaUall <- sapply(lmeUall, fixef)          # Matrix with beta(-i)
 vb.inv <- solve(vcovb)                       
 CookDfun <- function(betaU){  
