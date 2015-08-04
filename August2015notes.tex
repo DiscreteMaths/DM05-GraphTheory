@@ -1,21 +1,23 @@
- 
+ s a list, but does not have components 'x' and 'y'
+> 
+> fm1 <- lmList(dat)
+> fm2 <- lme(dat)
+> plot(compareFits(coef(fm1), coef(fm2)))
+> plot(compareFits(JS.roy1,JS.roy2))
+
+%===================================================================================================%
  
 The LME for the ith subject is written as:
  
 yi=0+1xi1+2xi2+b0+b1izi1+b2izi2+i 
  
- 
-yi is the response variable.
+ yi is the response variable.
  
 The intercept and two methods are fixed effects, with  coefficients.
 The two methods are also random effects, with b coefficients.
  
- 
- 
- 
- 
- 
- 
+%===================================================================================================%
+
 A multilevel mode is used to describe the blood pressure yijk measured.
  
 yijk=j+bi+bi,k+ijk
@@ -29,11 +31,7 @@ bi,k describes the kth replicate within subject effect
  
 Error
 ijk residual.
- 
- 
- 
- 
- 
+ %===================================================================================================%
  
 Laird Ware form for Single level grouping
  
