@@ -79,6 +79,10 @@ Infldf <- inner_join(CDdf,DFBetadf)
 Infldf<- arrange(Infldf,desc(CDs))
 head(Infldf)
 ```
+This plot is very simple to interpret. If the points align on the line of equality, the respective methods can be said to be in agreement.
+If is worth noting that it does really on complex calculations.
+
+If two methods of measurement are in agreement, the DFbeta for each case should be more or less the same for both.
 
 ```{r}
 plot(Infldf$methodJ,Infldf$methodR,col="red",pch=16)
@@ -90,6 +94,10 @@ plot(Infldf$methodJ,Infldf$methodS,col="red",pch=16)
 abline(c(0,1))
 ```
 ```{r}
+plot(Infldf$methodR,Infldf$methodS,col="red",pch=16)
+abline(c(0,1))
+```
+```{r}
 
 dim(blood)
 
@@ -98,7 +106,7 @@ dim(blood.red)
 ```
 
 ```{r}
-dfbetas(roy.LME4.inf)
+round(dfbetas(roy.LME4.inf),4)
 ```
 
 
