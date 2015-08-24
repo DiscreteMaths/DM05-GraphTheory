@@ -41,7 +41,7 @@ colClasses=c('factor','factor',rep('numeric',4)))
 ```
 
 ```{r}
-head(rm)
+head(r1)
 ```
 ```{r}
 rm <- reshape(r1,direction='long',
@@ -90,16 +90,67 @@ lSymm <- lme(y ~  Age * Gender,corr=corSymm(form= ~ I(Age/2-3)),
 ```
 
 ```{r}
+summary(lSymm)
+coef(lSymm)
+fixef(lSymm)
+ranef(lSymm)
+```
+
+```{r}
 
 coefFulllme <- as.numeric(coef(lSymm)[1,1:4])
 VCMlme <- vcov(lSymm)
+```
+
+```{r}
+coefFulllme
+VCMlme
+
+```
+#### Case 17 Deletion
+```{r}
+
+x=17
+rloo <- rm[rm$Person !=x,]
+      lSymm <- lme(y ~  Age * Gender,
+          data=rloo, random= list(Person =pdSymm(~ fage-1)),
+          method='ML')
+```
+```{r}
+coef(lSymm)
+```
+```{r}
+coef <- as.numeric(coef(lSymm)[1,1:4])
+coef    
+```
+```{r}
+genderF <- rm[rm$Person==x,'Gender'][1]=='F'
+```
+```{r}
+pred <- coef[1]+ c(8,10,12,14)*coef[2]+
+          genderF*coef[3]+c(8,10,12,14)*coef[4]*genderF
+
+pred
+
+```
+```{r}
+obs <- rm[rm$Person ==x,'y']
+
+```
+```{r}
+
+      CD=mahalanobis(coef,coefFulllme,VCMlme)/4
+
+```
+```{r}
+c(press=sum((obs-pred)^2),cd=CD,coef)
 ```
 ```{r}
 lSymmLSO <- sapply(levels(rm$Person), function(x) {
       rloo <- rm[rm$Person !=x,]
       lSymm <- lme(y ~  Age * Gender,
-          data=rloo, random= list(Person =pdSymm(~ fage-1)),
-          method='ML')
+      data=rloo, random= list(Person =pdSymm(~ fage-1)),
+      method='ML')
       coef <- as.numeric(coef(lSymm)[1,1:4])
       genderF <- rm[rm$Person==x,'Gender'][1]=='F'
       pred <- coef[1]+
@@ -110,6 +161,7 @@ lSymmLSO <- sapply(levels(rm$Person), function(x) {
       CD=mahalanobis(coef,coefFulllme,VCMlme)/4
       c(press=sum((obs-pred)^2),cd=CD,coef)
     })
+
 ```
 ```{r}
 lSymmLSO <- t(lSymmLSO)
