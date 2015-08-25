@@ -85,7 +85,7 @@ Infldf[Infldf$case %in% c(78,80,36,22), ]
 
 ```
 ```{r}
-# Cook's D plot
+# D plot
 par(mfrow=c(2,2))
 plot(modelRJ, which=1)
 plot(modelRJ, which=2)

@@ -81,11 +81,73 @@ LME models assume that the residuals of the model are normally distributed. A No
 	\end{verbatim}	
 \end{framed}
 
+\begin{verbatim}
+plot(roy.NLME, resid(., type = "p") ~ fitted(.) | method, abline = 0, id=.05)
+\end{verbatim}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\linewidth]{images/bloodnlmeResidPlot2}
+\caption{}
+\label{fig:blood}
+\end{figure}
+
+
+\subsubsection{Cooks distance- Predict means thing here}
+
+
+The \texttt{CookD} (predictmeans)
+
+
+
+\begin{framed}
+\begin{verbatim}
+library(predictMeans)
+CookD(model, group=method, plot=TRUE, idn=5, newwd=FALSE)
+\end{verbatim}
+\end{framed}
+
+
+\begin{verbatim}
+## Cook's Distance
+
+\end{verbatim}
+
+The particular cases that we will omit for the subsequent analysis are subjects 68,78 and 80.
+
+\subsubsection{Reduced Data Set}
+
+\begin{framed}
+\begin{verbatim}
+
+blood.red <- blood[!(blood$subject %in% c(68,78,80)),]
+dim(blood.red)
+# 27 observations should be removed.
+
+roy.NLME.red <-lme(BP ~ method-1 , random=~1|subject,data = blood.red)
+plot(roy.NLME.red, resid(., type = "p") ~ fitted(.) | method, abline = 0, id=.05)
+\end{verbatim}
+\end{framed}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{images/bloodnlmeResidPlot2B}
+\end{figure}
 
 
 \newpage
 
 \subsubsection{Checking the Assumption by Method}
+
+% A residual is the difference between an observed quantity and its
+% estimated or predicted value. In LME models, there are two types
+% of residuals, marginal residuals and conditional residuals. A
+% marginal residual is the difference between the observed data and
+% the estimated marginal mean. A conditional residual is the
+% difference between the observed data and the predicted value of
+% the observation. In a model without random effects, both sets of
+% residuals coincide.
+\subsection{Residual Plots}
+A residual plot is a graph that shows the residuals on the vertical axis and the independent variable on the horizontal axis. If the points in a residual plot are randomly dispersed around the horizontal axis, a linear regression model is appropriate for the data; otherwise, a non-linear model is more appropriate.
 
 \begin{framed}
 	\begin{verbatim}
@@ -124,13 +186,8 @@ This code will allow you to make QQ plots for each level of the random effects. 
 \begin{framed}
 	\begin{verbatim}
 	qqnorm(JS.roy1, ~ranef(.))
-	\end{verbatim}
-\end{framed}
 
-
-\begin{framed}
-	\begin{verbatim}
-	qqnorm(JS.roy1, ~ranef(.,levels=1)
+ # 	qqnorm(JS.roy1, ~ranef(.,levels=1)
 	\end{verbatim}
 \end{framed}
 \begin{figure}[h!]
@@ -248,8 +305,97 @@ Suppose we refit the model, with a reduced data set ( for example, with subject 
 \chapter{Using DFBETAs from LME Models to Assess Agreement}
 	
 	
+	\citet{schabenberger} examines the use and implementation of
+	influence measures in LME models.
+	
+	Influence is understood to be the ability of a single or multiple
+	data points, through their presences or absence in the data, to
+	alter important aspects of the analysis, yield qualitatively
+	different inferences, or violate assumptions of the statistical
+	model \citep{schabenberger}.
+	
+	Outliers are the most noteworthy data points in an analysis, and
+	an objective of influence analysis is how influential they are,
+	and the manner in which they are influential.
+	
+	\citet{schabenberger} describes a simple procedure for quantifying
+	influence. Firstly a model should be fitted to the data, and
+	estimates of the parameters should be obtained. The second step is
+	that either single of multiple data points, specifically outliers,
+	should be omitted from the analysis, with the original parameter
+	estimates being updated. This is known as `\textit{leave one out \ leave k
+	out' analysis}. The final step of the procedure is comparing the
+	sets of estimates computed from the entire and reduced data sets
+	to determine whether the absence of observations changed the
+	analysis.
+	
+	%--------------------------------------------------------------------------%
+	\newpage
+	\subsubsection{Case Deletion Diagnostics}
+		
+	Since the pioneering work of Cook in 1977, deletion measures have been applied to many statistical models for identifying influential observations.
+	
+	Deletion diagnostics provide a means of assessing the influence of an observation (or groups of observations) on inference on the estimated parameters of LME models.
+	
+	Data from single individuals, or a small group of subjects may influence non-linear mixed effects model selection. Diagnostics routinely applied in model building may identify such individuals, but these methods are not specifically designed for that purpose and are, therefore, not optimal. We describe two likelihood-based diagnostics for identifying individuals that can influence the choice between two competing models.
+	Case-deletion diagnostics provide a useful tool for identifying influential observations and outliers.
+	
+	The computation of case deletion diagnostics in the classical model is made simple by the fact that estimates of $\beta$ and $\sigma^2$, which exclude the ith observation, can be computed without re-fitting the model. Such update formulas are available in the mixed model only if you assume that the covariance parameters are not affected by the removal of the observation in question. This is rarely a reasonable assumption.
+	
+	\subsection{Terminology for Case Deletion diagnostics} %1.8
+	
+	\citet{preisser} describes two type of diagnostics. When the set consists of only one observation, the type is called
+	'observation-diagnostics'. For multiple observations, Preisser describes the diagnostics as 'cluster-deletion' diagnostics.
+	
+	
+	\subsection{Influence}
+	
 	Influence arises at two stages of the LME model. Firstly when $\mathbf{V}$ is estimated by $\hat{V}$, and subsequent
 	estimations of the fixed and random regression coefficients $\mathbf{\beta}$ and $u$, given $\mathbf{\hat{V}}$.
+	
+	%- The Mahalanobis distance is a measure of the distance between a point P and a distribution D, introduced by P. C. Mahalanobis in 1936.
+	4 It is a multi-dimensional generalization of the idea of measuring how many standard deviations away P is from the mean of D. 
+	
+	This distance is zero if P is at the mean of D, and grows as P moves away from the mean: Along each principal component axis, it measures the 
+	number of standard deviations from P to the mean of D. If each of these axes is rescaled to have unit variance, then Mahalanobis distance corresponds to standard Euclidean distance in the transformed space. Mahalanobis distance is thus unitless and scale-invariant, and takes into account the correlations of the data set.
+	
+	%============================================================================%
+	\subsection*{Description}
+	\texttt{influence()} is the workhorse function of the \texttt{influence.ME} package. 
+	
+	
+	Based on a priorly estimated mixed effects regression model (estimated using lme4), the \texttt{influence()} function iteratively 
+	
+	modifies the mixed effects model to neutralize the effect a grouped set of data has on the parameters, and which 
+	
+	returns returns the fixed parameters of these iteratively modified models. 
+	
+	These are used to compute measures of influential data.
+	
+	
+	
+	
+	\subsection*{Usage}
+	\begin{framed}
+		\begin{verbatim}
+		
+		influence(model, group=NULL, select=NULL, obs=FALSE, 
+		gf="single", count = FALSE, delete=TRUE, ...)
+		\
+		\end{verbatim}
+	\end{framed}
+	
+	
+	The \texttt{influence()} function was known as the \texttt{estex()} command in previous versions of the influence.ME pacakge
+	%===========================================================================%
+	%- http://support.sas.com/documentation/cdl/en/statug/63347/HTML/default/statug_reg_sect040.htm
+
+	
+	
+	\subsection{Overall Influence}
+	An overall influence statistic measures the change in the objective function being minimized. For example, in
+	OLS regression, the residual sums of squares serves that purpose. In linear mixed models fit by
+	\index{maximum likelihood} maximum likelihood (ML) or \index{restricted maximum likelihood} restricted maximum likelihood (REML), an overall influence measure is the \index{likelihood distance} likelihood distance [Cook and Weisberg ].
 	
 	
 	\section{Measures of Influence} %1.16
@@ -266,11 +412,19 @@ Suppose we refit the model, with a reduced data set ( for example, with subject 
 	\subsection{DFBETA} %1.16.3
 	DFBETAS (standardized difference of the beta) is a measure that standardizes the absolute difference in parameter estimates between a (mixed effects) regression model based on a full set of data, and a model from which a (potentially influential) subset of data is removed.
 	\subsection{DFBETA} %1.16.3
+		\texttt{dfbeta()}
+		
+		
+		The DFBETAS statistics are the scaled measures of the change in each parameter estimate and are calculated by deleting the th observation:
+		
+		where  is the th element of .
+		In general, large values of DFBETAS indicate observations that are influential in estimating a given parameter. Belsley, Kuh, and Welsch (1980) recommend 2 as a general cutoff value to indicate influential observations and  as a size-adjusted cutoff.
 	\begin{eqnarray}
 	DFBETA_{a} &=& \hat{\beta} - \hat{\beta}_{(a)} \\
 	&=& B(Y-Y_{\bar{a}}
 	\end{eqnarray}
-	In the case of method comparison studies, there are two covariates, and one can construct catterplots of the pairs of dfbeta values accordingly, both for LOO and LSO calculations. Furthermore 95\% confidence ellipse can be constructed around these scatterplots.
+	In the case of method comparison studies, there are two covariates, and one can constru
+	ct catterplots of the pairs of dfbeta values accordingly, both for LOO and LSO calculations. Furthermore 95\% confidence ellipse can be constructed around these scatterplots.
 	Note that with k covariates, there will be $k+1$ dfbetas (the intercept,$\beta_0$, and 1 $\beta$ for each covariate). For example there would be 2 sets of of dfbeta, 510 valoues for each in the case of LOO, and 85 for LSO diagnostics.
 	
 	
@@ -742,11 +896,6 @@ If the predictions are the same with or without the observation in question, the
 %	\caption{}
 %	\label{fig:CooksDistancePlot-JS-Roy}
 \end{figure}
-
-
-CookD (predictmeans)	R Documentation
-library(predictmeans)
-CookD(model, group=NULL, plot=TRUE, idn=3, newwd=TRUE)
 
 
 \newpage
