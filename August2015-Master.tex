@@ -4,10 +4,300 @@
 \tableofcontents
 \newpage	
 
-\chapter{Using DFBETAs from LME Models to Assess Agreement}
+\chapter{Residual Analysis}
 
+
+%====================================================================%
+\subsubsection{Residuals plots}
+
+lme allows to plot the residuals in the following ways:
+
+\begin{framed}
+	\begin{verbatim}
+	res_lme=residuals(model_lme)
+	plot(res_lme)
+	qqnorm(res_lme)
+	qqline(res_lme)
+	plot(model_lme)
+	\end{verbatim}
+\end{framed}
+
+%==============================================================%
+
+
+\subsection{Diagnostic Plots for LME models}
+
+Pinheiro and Bates provide some insight into how to compute and interpret model diagnostic plots for lme models. Unfortunately this aspect of LME theory is not as expansive as the corresponding body of work for Linear Models.
+
+When the \texttt{plot} function calls the model object, the residual plot is produced.
+
+
+
+
+
+\begin{framed}
+	\begin{verbatim}
+	plot(JS.roy1, which=c(1) )
+	\end{verbatim}
+\end{framed}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/ResidPlot1}
+	\caption{}
+	\label{fig:ResidPlot1}
+\end{figure}
+LME models assume that the residuals of the model are normally distributed. A Normal probability plot can be constructed to check this assumption. Commonly used \texttt{R} commands cabbe used to construct the plot.
+\newpage
+
+\begin{framed}
+	\begin{verbatim}
+	qqnorm(resid(JS.roy1),pch="*",col="red")
+	qqline(resid(JS.roy1),col="blue")
+	\end{verbatim}
+\end{framed}
+
+
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{images/Resid-newplot}
+	\caption{}
+	\label{fig:Resid-newplot}
+\end{figure}
+
+\begin{framed}
+	\begin{verbatim}
+	table(dat$method[1:255])
+	## 
+	##   J   S 
+	## 255   0
+	table(dat$method[256:510])
+	## 
+	##   J   S 
+	##   0 255
+	\end{verbatim}	
+\end{framed}
+
+
+
+\newpage
+
+\subsubsection{Checking the Assumption by Method}
+
+\begin{framed}
+	\begin{verbatim}
+	par(mfrow=c(1,2))
+	qqnorm((resid(JS.roy1)[1:255]),
+	pch="*",col="red",
+	ylim=c(-40,40),
+	main="Method J")
+	qqline(resid(JS.roy1)[1:255],col="blue")
+	qqnorm((resid(JS.roy1)[256:510]),
+	pch="*",col="red",
+	ylim=c(-40,40),
+	main="Method S")
+	qqline(resid(JS.roy1)[256:510],col="blue")
+	par(mfrow=c(1,1))
+	\end{verbatim}	
+\end{framed}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1.1\linewidth]{images/Resid-newplot2}
+	\caption{}
+	\label{fig:Resid-newplot2}
+\end{figure}
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/ResidPlot3}
+	\caption{}
+	\label{fig:ResidPlot3}
+\end{figure}
+
+This code will allow you to make QQ plots for each level of the random effects.  LME models assume that not only the within-cluster residuals are normally distributed, but that each level of the random effects are as well. Depending on the model, you can vary the level from 0, 1, 2 and so on
+\begin{framed}
+	\begin{verbatim}
+	qqnorm(JS.roy1, ~ranef(.))
+	\end{verbatim}
+\end{framed}
+
+
+\begin{framed}
+	\begin{verbatim}
+	qqnorm(JS.roy1, ~ranef(.,levels=1)
+	\end{verbatim}
+\end{framed}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/ResidPlot2}
+	\caption{}
+	\label{fig:ResidPlot2}
+\end{figure}
+
+\section{Fitting Models with nlme R package}
+
+\subsection{Residual Analysis}
+
+
+\textbf{qqnorm.lme}
+% {nlme}	R Documentation
+Normal Plot of Residuals or Random Effects from an lme Object
+
+Description
+
+Diagnostic plots for assessing the normality of residuals and random effects in the linear mixed-effects fit are obtained. 
+The form argument gives considerable flexibility in the type of plot specification. 
+A conditioning expression (on the right side of a | operator) always implies that different panels are used 
+for each level of the conditioning factor, according to a Trellis display.
+
+%============================================================================== %
+\section{Preliminaries: Useful R commands}
+\section{\texttt{coef.lme}}
+
+The command \texttt{coef.lme} extract lmes coefficients
+
+
+The estimated coefficients at level i are obtained by adding together the fixed effects estimates and the corresponding random effects estimates at grouping levels less or equal to i. The resulting estimates are returned as a data frame, with rows corresponding to groups and columns to coefficients. Optionally, the returned data frame may be augmented with covariates summarized over groups.
+\begin{framed}
+	\begin{verbatim}
+	> JS.roy1 %>% coef %>% head(10)
+	methodJ   methodS
+	74  84.31724  91.08404
+	36  91.54994  97.05548
+	3   81.16581  96.48653
+	62  92.09493  90.89073
+	31  88.41411 103.38802
+	42  95.56881 104.70922
+	11 103.46092 111.33625
+	41  94.97700 108.08384
+	55  79.44762 110.02055
+	17 101.53470 112.46964
+	\end{verbatim}
+\end{framed}
+Suppose we refit the model, with a reduced data set ( for example, with subject 68 missing)
+
+\begin{framed}
+	\begin{verbatim}
+	x=68
+	datred <- dat[dat$subject !=x,]
+	
+	# datred is other 84 cases (504 observations)
+	
+	JS.roy1.red = lme(BP ~ method-1, 
+	data = datred,
+	random = list(subject=pdSymm(~ method-1)), 
+	weights=varIdent(form=~1|method),
+	correlation = corSymm(form=~1 | subject/repl), 
+	method="ML")
+	\end{verbatim}
+\end{framed}
+
+\begin{framed}
+	\begin{verbatim}
+	> JS.roy1.red %>% coef %>% dim
+	[1] 84  2
+	>
+	> JS.roy1.red %>% coef %>% head(10)
+	methodJ   methodS
+	74  84.31425  90.89550
+	36  91.54526  96.86813
+	3   81.17663  96.36665
+	62  92.07933  90.64629
+	31  88.42473 103.27726
+	42  95.57027 104.56000
+	11 103.46071 111.18930
+	41  94.98491 107.96791
+	55  79.48324 110.02963
+	17 101.53939 112.34591
+	
+	\end{verbatim}
+\end{framed}
+
+\chapter{LME commands}
+
+\texttt{vcov} returns the variance-covariance matrix of the main parameters of a fitted model object.
+\begin{framed}
+	\begin{verbatim}
+	> vcov(JS.roy1)
+	methodJ  methodS
+	methodJ 11.01701  9.30105
+	methodS  9.30105 11.75301
+	\end{verbatim}
+\end{framed}
+
+\texttt{getVarCov} extract the variance-covariance matrix from a fitted model, such as a mixed-effects model.
+\begin{framed}
+	\begin{verbatim}
+	> getVarCov(JS.roy1)
+	Random effects variance covariance matrix
+	methodJ methodS
+	methodJ  923.98  785.23
+	methodS  785.23  971.29
+	Standard Deviations: 30.397 31.166 
+	\end{verbatim}
+\end{framed}	
+
+
+%============================================================================ %
+\chapter{Using DFBETAs from LME Models to Assess Agreement}
+	
+	
+	Influence arises at two stages of the LME model. Firstly when $\mathbf{V}$ is estimated by $\hat{V}$, and subsequent
+	estimations of the fixed and random regression coefficients $\mathbf{\beta}$ and $u$, given $\mathbf{\hat{V}}$.
+	
+	
+	\section{Measures of Influence} %1.16
+	
+	The impact of an observation, or a case with multiple obverations, on a regression fitting can be determined by the difference between the estimated regression coefficient of a model with all observations and the estimated coefficient when the particular observation is deleted. The measure DFBETA is the studentized value of this difference.
+	
+	
+	
+	%-------------------------------------------------------------------------------------------------------------------------------------%
+	\subsection{Influential Observations : DFBeta and DFBetas}
+	% http://stats.stackexchange.com/questions/22161/how-to-read-cooks-distance-plots
+	% Cook's distance refers to how far, on average, predicted y-values will move if the observation in question is dropped from the data set. 
+	The dfbeta refers to how much a parameter estimate changes if the observation or case in question is dropped from the data set.  Cook's distance is presumably more important to you if you are doing predictive modeling, whereas dfbeta is more important in explanatory modeling.
+	\subsection{DFBETA} %1.16.3
+	DFBETAS (standardized difference of the beta) is a measure that standardizes the absolute difference in parameter estimates between a (mixed effects) regression model based on a full set of data, and a model from which a (potentially influential) subset of data is removed.
+	\subsection{DFBETA} %1.16.3
+	\begin{eqnarray}
+	DFBETA_{a} &=& \hat{\beta} - \hat{\beta}_{(a)} \\
+	&=& B(Y-Y_{\bar{a}}
+	\end{eqnarray}
+	In the case of method comparison studies, there are two covariates, and one can construct catterplots of the pairs of dfbeta values accordingly, both for LOO and LSO calculations. Furthermore 95\% confidence ellipse can be constructed around these scatterplots.
+	Note that with k covariates, there will be $k+1$ dfbetas (the intercept,$\beta_0$, and 1 $\beta$ for each covariate). For example there would be 2 sets of of dfbeta, 510 valoues for each in the case of LOO, and 85 for LSO diagnostics.
+	
+	
+	%-------------------------------------------------------------------------------------------------------------------------------------%
+	
+	\subsection{DFFITS} %1.16.1
+	DFFITS is a statistical measured designed to a show how influential an observation is in a statistical model. 
+	\begin{displaymath} DFFITS = {\widehat{y_i} -
+		\widehat{y_{i(k)}} \over s_{(k)} \sqrt{h_{ii}}} \end{displaymath}
+	It is closely related to the studentized residual. For the sake of brevity, we will concentrate on the Studentized Residuals.
+	%===================================================================================== %
+	\subsection{PRESS} %1.16.2
+	The prediction residual sum of squares (PRESS) is an value associated with this calculation. When fitting linear models, PRESS can be used as a criterion for model selection, with smaller values indicating better model fits.
+	\begin{equation}
+	PRESS = \sum(y-y^{(k)})^2
+	\end{equation}
+	
+	
+	\begin{itemize}
+		\item $e_{-Q} = y_{Q} - x_{Q}\hat{\beta}^{-Q}$
+		\item $PRESS_{(U)} = y_{i} - x\hat{\beta}_{(U)}$
+	\end{itemize}
+	
+	
+	%-------------------------------------------------------------------------------------------------------------------------------------%
 \section{Fitting Models with the LME4 R package}
-Maximum likelihood or restricted maximum likelihood (REML) estimates of the parameters in linear mixed-effects models can be determined using the lmer function in the lme4 package for R. As for most model-fitting functions in R, the model is described in an lmer call by a formula, in this case including both fixed- and random-effects terms. The formula and data together determine a numerical representation of the model from which the profiled deviance or the profiled REML criterion can be evaluated as a function of some of the model parameters. The appropriate criterion is optimized, using one of the constrained optimization functions in R, to provide the parameter estimates. We describe the structure of the model, the steps in evaluating the profiled deviance or REML criterion, and the structure of classes or types that represents such a model. Sufficient detail is included to allow specialization of these structures by users who wish to write functions to fit specialized linear mixed models, such as models incorporating pedigrees or smoothing splines, that are not easily expressible in the formula language used by lmer.
+Maximum likelihood or restricted maximum likelihood (REML) estimates of the parameters in linear mixed-effects models can be determined using the lmer function in the lme4 package for R. As for most model-fitting functions in R, the model is described in an lmer call by a formula, in this case including both fixed- and random-effects terms. The formula and data together determine a numerical representation of the model from which the profiled deviance or the profiled REML criterion can be evaluated as a function of some of the model parameters. The appropriate criterion is optimized, using one of the constrained optimization functions in \texttt{R}, to provide the parameter estimates. We describe the structure of the model, the steps in evaluating the profiled deviance or REML criterion, and the structure of classes or types that represents such a model. Sufficient detail is included to allow specialization of these structures by users who wish to write functions to fit specialized linear mixed models, such as models incorporating pedigrees or smoothing splines, that are not easily expressible in the formula language used by lmer.
 
 
 \begin{description}
@@ -23,6 +313,7 @@ library(lme4)
 MCS.lme4 <- lmer(y ~ method-1 + (1|subject) , data=MCSdata)
 \end{verbatim}
 \end{framed}
+
 %============================================================================= %
 \section{influence.ME}
 
@@ -48,93 +339,6 @@ DFBETAS (standardized difference of the beta) is a measure that standardizes the
 When in an MCS study. DFBetas can be used as a proxy measurement, allowing simple techniques to be used for assessing agreement.
 
 
-%============================================================================== %
-\chapter{Preliminaries: Useful R commands}
-\section{\texttt{coef.lme}}
-
-The command \texttt{coef.lme} extract lmes coefficients
-
-
-The estimated coefficients at level i are obtained by adding together the fixed effects estimates and the corresponding random effects estimates at grouping levels less or equal to i. The resulting estimates are returned as a data frame, with rows corresponding to groups and columns to coefficients. Optionally, the returned data frame may be augmented with covariates summarized over groups.
-\begin{framed}
-\begin{verbatim}
-> JS.roy1 %>% coef %>% head(10)
-     methodJ   methodS
-74  84.31724  91.08404
-36  91.54994  97.05548
-3   81.16581  96.48653
-62  92.09493  90.89073
-31  88.41411 103.38802
-42  95.56881 104.70922
-11 103.46092 111.33625
-41  94.97700 108.08384
-55  79.44762 110.02055
-17 101.53470 112.46964
-\end{verbatim}
-\end{framed}
-Suppose we refit the model, with a reduced data set ( for example, with subject 68 missing)
-
-\begin{framed}
-	\begin{verbatim}
-x=68
-datred <- dat[dat$subject !=x,]
-
-# datred is other 84 cases (504 observations)
-
-JS.roy1.red = lme(BP ~ method-1, 
-     data = datred,
-     random = list(subject=pdSymm(~ method-1)), 
-     weights=varIdent(form=~1|method),
-     correlation = corSymm(form=~1 | subject/repl), 
-     method="ML")
-\end{verbatim}
-\end{framed}
-
-\begin{framed}
-\begin{verbatim}
-> JS.roy1.red %>% coef %>% dim
-[1] 84  2
->
-> JS.roy1.red %>% coef %>% head(10)
-     methodJ   methodS
-74  84.31425  90.89550
-36  91.54526  96.86813
-3   81.17663  96.36665
-62  92.07933  90.64629
-31  88.42473 103.27726
-42  95.57027 104.56000
-11 103.46071 111.18930
-41  94.98491 107.96791
-55  79.48324 110.02963
-17 101.53939 112.34591
-
-\end{verbatim}
-\end{framed}
-
-\chapter{LME commands}
-
-\texttt{vcov} returns the variance-covariance matrix of the main parameters of a fitted model object.
-\begin{framed}
-	\begin{verbatim}
-> vcov(JS.roy1)
-         methodJ  methodS
-methodJ 11.01701  9.30105
-methodS  9.30105 11.75301
-\end{verbatim}
-\end{framed}
-
-\texttt{getVarCov} extract the variance-covariance matrix from a fitted model, such as a mixed-effects model.
-\begin{framed}
-\begin{verbatim}
-> getVarCov(JS.roy1)
-Random effects variance covariance matrix
-        methodJ methodS
-methodJ  923.98  785.23
-methodS  785.23  971.29
-Standard Deviations: 30.397 31.166 
-\end{verbatim}
-\end{framed}	
-	
 
 \chapter{Model Diagnostics for MCS}
 
@@ -323,6 +527,13 @@ However, using conditional residuals for diagnostics presents difficulties, as t
 
 
 \subsection{PRESS Residuals and PRESS Statistic}
+% % - Wikipedia
+In statistics, the predicted residual sum of squares (PRESS) statistic is a form of cross-validation used in regression analysis to provide a summary measure of the fit of a model to a sample of observations that were not themselves used to estimate the model. It is calculated as the sums of squares of the prediction residuals for those observations.
+
+A fitted model having been produced, each observation in turn is removed and the model is refitted using the remaining observations. The out-of-sample predicted value is calculated for the omitted observation in each case, and the PRESS statistic is calculated as the sum of the squares of all the resulting prediction errors:[4]
+\[\mbox{PRESS} =\sum_{i=1}^n (y_i - \hat{y}_{i, -i})^2 \]
+Given this procedure, the PRESS statistic can be calculated for a number of candidate model structures for the same dataset, with the lowest values of PRESS indicating the best structures. Models that are over-parameterised (over-fitted) would tend to give small residuals for observations included in the model-fitting but large residuals for observations that are excluded.
+
 % % - http://support.sas.com/documentation/cdl/en/statug/63347/HTML/default/viewer.htm#statug_mixed_sect027.htm
 An (unconditional) predicted value is $\hat{y}_i = x^{\prime}_i \boldsymbol{\hat{\beta}}$, where 
 the vector $x_i$ is the $i$th row of $\boldsymbol{X}$. For an \texttt{lme} object, such as our fitted model \texttt{JS.roy1}, the predicted values for each subject can be determined using the \texttt{coef.lme} function.
@@ -528,12 +739,21 @@ If the predictions are the same with or without the observation in question, the
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/CooksDistancePlot-JS-Roy}
-	\caption{}
-	\label{fig:CooksDistancePlot-JS-Roy}
+%	\caption{}
+%	\label{fig:CooksDistancePlot-JS-Roy}
 \end{figure}
 
-\newpage
 
+CookD (predictmeans)	R Documentation
+library(predictmeans)
+CookD(model, group=NULL, plot=TRUE, idn=3, newwd=TRUE)
+
+
+\newpage
+\subsection{Deviance}
+In statistics, deviance is a quality of fit statistic for a model that is often used for statistical hypothesis testing. It is a generalization of the idea of using the sum of squares of residuals in ordinary least squares to cases where model-fitting is achieved by maximum likelihood.
+
+%-----------------------------------%
 
 
 \bibliography{DB-txfrbib}
