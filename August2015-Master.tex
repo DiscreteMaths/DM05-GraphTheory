@@ -21,24 +21,33 @@ Erroneous measurements are incorrect measurements that indicate disagreement bet
 
 
 C: Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas
-In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are useful in the case of MCS problems.
-A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required.
+In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are particularly useful in the case of MCS problems.
+
+A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case
+(x1,x2,x3,y1,y2,y3)
+
+Leave One out requires we omit one observation (e.g. x1)
+Leave Pair out  we would omit one pair of observation (e.g. x1 and y1)
+Leave Case out we omit all observations associated with a particular case. (e.g. x1,x2,x3,y1,y2,y3)
+
 
 D: Using DFBETAs to assess agreement
-Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both metods.
+Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.
 As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. 
 IF the points align along the line of equality, then both methods can be said to be in agreement. 
 If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
 
-The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis.
+The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. The Bonferroni Outlier Test can be used to identify unusual cases.
 
 E: Using Roy's Test to Identify cause of Lack of agreement
 
-Barnhard specifies three conditions for method of measurement that are required for two methods of measurement to be considered in agreement.
+Barnhart specifies three conditions for method of measurement that are required for two methods of measurement to be considered in agreement.
 
   i) No Significant Inter-method bias
   ii) No significant Difference in Within-Subject Variance
   iii) No significant Difference in Within-Subject Variance 
+
+Roy(2009) demonstrates a series of tests that can be used for this purpose. If two methods of measuement lack agreement, the cause of this lack of agreement can be pinpointed.
 
 F: Using Roy's Model to Compute LoAs and CR 
 
@@ -49,6 +58,8 @@ G: Model Diagnostics for Roy's Models
 Further to previous work, this secton revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise the model.
 
 H: Permutation and Power Tests  
+
+This section explores topics such as Dependent variable simulaton, Power Analysis and Permutation testing.
 
 
 \endv{verbatim}
