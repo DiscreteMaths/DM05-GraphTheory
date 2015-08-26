@@ -5,14 +5,52 @@
 
 \begin{verbatim}
 
+
 A: Introduction to LME Models, Fitting LME Models to MCS Data
+
+In this section, we introduce the LME model, discusss how it can be applied to MCS problems, and how it is desirable in the case of replicate measurements, giving some examples from previous work (i.e. Carstensen et Al, Lai \& Shaio, and Roy)
+Further to that, there will be a discussion on fitting various types LME models using freely available software. To fully understand the complexities, a comparison of the nlme and LME4 R Packages is required.
+While the MCS problem is conventionally poised in the context of two methods of measurements, LME models allow for a straightforward analysis that looks at several methods of measurement simulataneously, specifically looking at inter-method bias.
+
+
 B: Residual Analysis for LME, Applications to MCS Data
+
+This short section will look at residual analysis for LME models. The underlying assumptions for LME models are similar to those of classical linear mdoels. There are two key techniques: a residual plot and the normal probability plot. Using the nlme package it is possible to create plots specific to each method. This is useful in determine which methods `disagree` with the rest.
+Analysis of the residuals would determine if the methods of measurement disagree systematically, or whether or not erroneous measurements associated with a subset of the cases are the cause of disagreement.
+Erroneous measurements are incorrect measurements that indicate disagreement between methods that would otherwise be in agreement.
+
+
 C: Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas
+In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are useful in the case of MCS problems.
+A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required.
+
 D: Using DFBETAs to assess agreement
+Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both metods.
+As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. 
+IF the points align along the line of equality, then both methods can be said to be in agreement. 
+If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
+
+The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis.
+
 E: Using Roy's Test to Identify cause of Lack of agreement
+
+Barnhard specifies three conditions for method of measurement that are required for two methods of measurement to be considered in agreement.
+
+  i) No Significant Inter-method bias
+  ii) No significant Difference in Within-Subject Variance
+  iii) No significant Difference in Within-Subject Variance 
+
 F: Using Roy's Model to Compute LoAs and CR 
+
+In this short section, a demonstration of how Roy's technique can be used to compute two common MCS metrics: Limits of Agreement and the Coefficient of Repeatabilty.
+
 G: Model Diagnostics for Roy's Models
-H: Permutation and Power Tests    
+
+Further to previous work, this secton revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise the model.
+
+H: Permutation and Power Tests  
+
+
 \endv{verbatim}
 %================================================%
 \tableofcontents
