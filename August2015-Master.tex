@@ -2,69 +2,86 @@
 \begin{document}
 %========================================================================== %
 \setcounter{tocdepth}{1}
+\tableofcontents
+\chapter{Using LME Models for Method Comparison Problems}
+\section{Overview}
+This chapter discusses the use of LME models in Method Comparison problems. 
+In this section, we provide a brief discussion of each section in this chapter.
 
-\begin{verbatim}
 
-
-A: Introduction to LME Models, Fitting LME Models to MCS Data
+%===================================== %
+% - A
+\subsection*{Introduction to LME Models, Fitting LME Models to MCS Data}
 
 In this section, we introduce the LME model, discusss how it can be applied to MCS problems, and how it is desirable in the case of replicate measurements, giving some examples from previous work (i.e. Carstensen et Al, Lai \& Shaio, and Roy)
-Further to that, there will be a discussion on fitting various types LME models using freely available software. To fully understand the complexities, a comparison of the nlme and LME4 R Packages is required.
-While the MCS problem is conventionally poised in the context of two methods of measurements, LME models allow for a straightforward analysis that looks at several methods of measurement simulataneously, specifically looking at inter-method bias.
 
+Further to that, there will be a discussion on fitting various types LME models using freely available software. To fully understand the complexities, a comparison of the \textbf{nlme} and \textbf{LME4} \texttt{R} Packages is required.
+While the MCS problem is conventionally poised in the context of two methods of measurements, LME models allow for a straightforward analysis whereby several methods of measurement can be measured simulataneously. However Simple models only can only indicate agreement of lack thereof, and the presence of inter-method bias. To consider more complex questions, more complex LME models are required.  Useful approaches, such as Roy (2009) will be introduced in a later section.
 
-B: Residual Analysis for LME, Applications to MCS Data
+%====================================== %
+% - B
+\subsection*{Residual Analysis for LME, Applications to MCS Data}
 
 This short section will look at residual analysis for LME models. The underlying assumptions for LME models are similar to those of classical linear mdoels. There are two key techniques: a residual plot and the normal probability plot. Using the nlme package it is possible to create plots specific to each method. This is useful in determine which methods `disagree` with the rest.
 Analysis of the residuals would determine if the methods of measurement disagree systematically, or whether or not erroneous measurements associated with a subset of the cases are the cause of disagreement.
 Erroneous measurements are incorrect measurements that indicate disagreement between methods that would otherwise be in agreement.
-
-
-C: Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas
+%======================================================== %
+% PArt C
+\subsection*{Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas}
 In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are particularly useful in the case of MCS problems.
 
-A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case
-(x1,x2,x3,y1,y2,y3)
+A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case: $(x1,x2,x3,y1,y2,y3)$
 
-Leave One out requires we omit one observation (e.g. x1)
-Leave Pair out  we would omit one pair of observation (e.g. x1 and y1)
-Leave Case out we omit all observations associated with a particular case. (e.g. x1,x2,x3,y1,y2,y3)
-
-
-D: Using DFBETAs to assess agreement
+\begin{itemize}
+\item Leave One Out - requires we omit one observation (e.g. x1)
+\item Leave Pair Out - we would omit one pair of observation (e.g. x1 and y1)
+\item Leave Case Out - we omit all observations associated with a particular case. (e.g. x1,x2,x3,y1,y2,y3)
+\end{itemize}
+%========================================================= %
+%- D
+\subsection*{Using DFBETAs to assess agreement}
 Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.
 As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. 
 IF the points align along the line of equality, then both methods can be said to be in agreement. 
 If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
 
-The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. The Bonferroni Outlier Test can be used to identify unusual cases.
-
-E: Using Roy's Test to Identify cause of Lack of agreement
+The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. A high correlation confirms good agreement. The Bonferroni Outlier Test and Cook's Distance values can be used to identify unusual cases.
+ 
+ %========================================================= %
+\subsection*{Using Roy's Test to Identify cause of Lack of agreement}
 
 Barnhart specifies three conditions for method of measurement that are required for two methods of measurement to be considered in agreement.
 
-  i) No Significant Inter-method bias
-  ii) No significant Difference in Within-Subject Variance
-  iii) No significant Difference in Within-Subject Variance 
+\begin{itemize}
+\item[(i)] No Significant Inter-method bias
+\item[(ii)] No significant Difference in Within-Subject Variance
+\item[(iii)] No significant Difference in Within-Subject Variance 
+\end{itemize}
+  
 
 Roy(2009) demonstrates a series of tests that can be used for this purpose. If two methods of measuement lack agreement, the cause of this lack of agreement can be pinpointed.
 
-F: Using Roy's Model to Compute LoAs and CR 
+%============================================== %
+%- F:
+\subsection*{Using Roy's Model to Compute LoAs and CR }
 
 In this short section, a demonstration of how Roy's technique can be used to compute two common MCS metrics: Limits of Agreement and the Coefficient of Repeatabilty.
 
-G: Model Diagnostics for Roy's Models
+%============================================== %
+%- G:
+\subsection*{Model Diagnostics for Roy's Models}
 
-Further to previous work, this secton revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise the model.
+Further to previous work, this section revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise the model.
 
-H: Permutation and Power Tests  
+%============================================== %
+% - H: 
+\subsection*{Permutation and Power Tests }
 
-This section explores topics such as Dependent variable simulaton, Power Analysis and Permutation testing.
+This section explores topics such as dependent variable simulation and Power Analysis ( Galecki and Bur ) and Permutation testing.
+It is possible to perform permutation t-tests for coefficients of (fixed) effects and permutation F-tests
 
 
-\endv{verbatim}
 %================================================%
-\tableofcontents
 	
 \chapter{Fitting LME Models}
 %\subsection{Overview of R implementations}
