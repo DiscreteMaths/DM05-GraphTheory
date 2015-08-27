@@ -13,9 +13,12 @@ In this section, we provide a brief discussion of each section in this chapter.
 % - A
 \subsection*{Introduction to LME Models, Fitting LME Models to MCS Data}
 
-In this section, we introduce the LME model, discusss how it can be applied to MCS problems, and how it is desirable in the case of replicate measurements, giving some examples from previous work (i.e. Carstensen et Al, Lai \& Shaio, and Roy)
+In this section, we introduce the LME model, discusss how it can be applied to MCS problems, and how it is desirable in the case of replicate measurements, giving some examples from previous work (i.e. Carstensen et Al, Lai \& Shaio, and Roy).
+
+Carstensen et al recommends that replicate measurements for each method, but recognizes that resulting data are more difficult to analyze. To this end, LME models are advocated.
 
 Further to that, there will be a discussion on fitting various types LME models using freely available software. To fully understand the complexities, a comparison of the \textbf{nlme} and \textbf{LME4} \texttt{R} Packages is required.
+
 While the MCS problem is conventionally poised in the context of two methods of measurements, LME models allow for a straightforward analysis whereby several methods of measurement can be measured simulataneously. However Simple models only can only indicate agreement of lack thereof, and the presence of inter-method bias. To consider more complex questions, more complex LME models are required.  Useful approaches, such as Roy (2009) will be introduced in a later section.
 
 %====================================== %
@@ -41,12 +44,20 @@ A discussion of how leave-k-out diagnostics would work in the context of MCS pro
 %- D
 \subsection*{Using DFBETAs to assess agreement}
 Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.
+
 As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. 
-IF the points align along the line of equality, then both methods can be said to be in agreement. 
+If the points align along the line of equality, then both methods can be said to be in agreement. 
 If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
 
-The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. A high correlation confirms good agreement. The Bonferroni Outlier Test and Cook's Distance values can be used to identify unusual cases.
+The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. A high correlation confirms good agreement. The Bonferroni Outlier Test and Cook's Distance values can be used to identify unusual cases, when the relationship is modelled as a classical linear model. A test for non-constant variance may also be applied.
  
+
+Deming Regression can be used to corroborate equality. Significance test for Deming regression estimates are not available, but 95\% bootstrap confidence intervals for the slope estimate and intercept estimates can be computed.
+
+
+Additionally a mean difference plot can be used to identify outliers. This mean-difference plot differs from the Bland-Altman plot in that the plot is denominated in terms of dfbeta values, and not in measurement units.
+
+If lack of agreement is indicated between methods of measurement, use of Roy's Testing is advised.(next section) 
  %========================================================= %
 \subsection*{Using Roy's Test to Identify cause of Lack of agreement}
 
@@ -59,26 +70,26 @@ Barnhart specifies three conditions for method of measurement that are required 
 \end{itemize}
   
 
-Roy(2009) demonstrates a series of tests that can be used for this purpose. If two methods of measuement lack agreement, the cause of this lack of agreement can be pinpointed.
+Roy(2009) demonstrates a LME model specification, and a series of tests that look at each of the criteria individually. If two methods of measuement lack agreement, the specific reason for this lack of agreement can be pinpointed.
 
 %============================================== %
 %- F:
 \subsection*{Using Roy's Model to Compute LoAs and CR }
 
-In this short section, a demonstration of how Roy's technique can be used to compute two common MCS metrics: Limits of Agreement and the Coefficient of Repeatabilty.
-
+In this short section, a demonstration of how Roy's technique can be used to compute two common MCS metrics: Limits of Agreement and the Coefficient of Repeatabilty. While Limits of Agreement are not used in 
+the analysis proposed here, there are ubiquituous in literature, and a demonstration on how to compute them with the Roy Model would assist the adoption of this proposed method.
 %============================================== %
 %- G:
 \subsection*{Model Diagnostics for Roy's Models}
 
-Further to previous work, this section revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise the model.
+Further to previous work, this section revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise Roy's model.
 
 %============================================== %
 % - H: 
 \subsection*{Permutation and Power Tests }
 
-This section explores topics such as dependent variable simulation and Power Analysis ( Galecki and Bur ) and Permutation testing.
-It is possible to perform permutation t-tests for coefficients of (fixed) effects and permutation F-tests
+This section explores topics such as dependent variable simulation and Power Analysis (Galecki and Burzykowski) and Permutation testing.
+Using the \textbf{\textit{predictmeans}} \texttt{R} package, it is possible to perform permutation t-tests for coefficients of (fixed) effects and permutation F-tests.
 
 
 %================================================%
