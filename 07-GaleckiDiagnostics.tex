@@ -1,0 +1,44 @@
+\documentclass[Main.tex]{subfiles}
+\begin{document}
+\subsection{Likelihood Distances}
+
+The \index{likelihood distance} likelihood distance is a global summary measure that expresses the joint influence of the subsets of observations, $U$, on all parameters in $\phi$ that were subject to updating. For classical linear models, the implementation of influence analysis is straightforward. \citet{schab} points out the likelihood distance gives the amount by which the log-likelihood of the model fitted from the full data changes if one were
+to estimate the model from a reduced-data estimates. Importantly $LD(\psi_{(U)})$ is not the log-likelihood obtained by fitting the model to the reduced data set. It is obtained by evaluating the likelihood function based on the full data set (containing all $n$ observations) at the reduced-data estimates.
+
+
+%---------------------------------------------------------- %
+%Likelihood Displacement.
+\[  LD(\boldsymbol{(U)})= 2[l\boldsymbol{\hat{(\phi)}} - l\boldsymbol{\hat{\phi}_\omega} ] \]
+\[  RLD(\boldsymbol{(U)})= 2[ l_R\boldsymbol{\hat{(\phi)}} - l_R\boldsymbol{\hat{(\phi)}_\omega} ] \]
+%	Large values indicate that $\boldsymbol{\hat{\theta}}$ and $\boldsymbol{\hat{\theta}_\omega}$ differ considerably.
+
+
+An overall influence statistic measures the change in the objective function being minimized. For example, in
+OLS regression, the residual sums of squares serves that purpose. In linear mixed models fit by
+\index{maximum likelihood} maximum likelihood (ML) or \index{restricted maximum likelihood} restricted maximum likelihood (REML), an overall influence measure is the \index{likelihood distance} likelihood distance \citep{cook}. In LME models, fitted by either ML or REML, an important overall
+ influence measure is the likelihood distance \citep{cook82}. The  procedure requires the calculation of the full data estimates
+ $\hat{\psi}$ and estimates based on the reduced data set  $\hat{\psi}_{(U)}$. The likelihood distance is given by
+ determining
+ 
+ 
+ \begin{eqnarray}
+ LD_{(U)} &=& 2\{l(\hat{\psi}) - l( \hat{\psi}_{(U)}) \}\\
+ RLD_{(U)} &=& 2\{l_{R}(\hat{\psi}) - l_{R}(\hat{\psi}_{(U)})\}
+ \end{eqnarray}
+%----schabenberger page 8
+For classical linear models, the implementation of influence analysis is straightforward.
+However, for LME models, the problem is more complex. Update formulas for the fixed effects are available only when the covariance parameters are assumed to be known. A measure of total influence requires updates of all model parameters. This can only be achieved in general is by omitting observations or cases, then refitting the model. This is a very simplistic approach, and computationally expensive.
+
+\citet{west} examines a group of methods that examine various aspects of influence diagnostics for LME models.
+For overall influence, the most common approaches are the \textit{likelihood distance} and the \textit{restricted likelihood distance}.
+
+\subsubsection{The \texttt{logLik} Function}
+\texttt{logLik.lme} returns the log-likelihood value of the linear mixed-effects model represented by object evaluated at the estimated coefficients. It is also possible to determine the restricted log-likelihood, if relevant, using this function. For the Blood Data Example,  the loglikelihood of the JS.roy1 model can be computed as follows.
+\begin{framed}
+\begin{verbatim}
+> logLik(JS.roy1)
+'log Lik.' -2030.736 (df=8)
+\end{verbatim}
+\end{framed}
+%======================================================================================= %
+\end{document}
