@@ -1,105 +1,3 @@
-\documentclass[Main.tex]{subfiles}
-\begin{document}
-%========================================================================== %
-\setcounter{tocdepth}{1}
-\tableofcontents
-\chapter{Using LME Models for Method Comparison Problems}
-\section{Overview}
-This chapter discusses the use of LME models in Method Comparison problems. 
-In this section, we provide a brief discussion of each section in this chapter.
-
-
-%===================================== %
-% - A
-\subsection*{Introduction to LME Models, Fitting LME Models to MCS Data}
-
-In this section, we introduce the LME model, discusss how it can be applied to MCS problems, and how it is desirable in the case of replicate measurements, giving some examples from previous work (i.e. Carstensen et Al, Lai \& Shaio, and Roy).
-
-Carstensen et al recommends that replicate measurements for each method, but recognizes that resulting data are more difficult to analyze. To this end, LME models are advocated.
-
-Further to that, there will be a discussion on fitting various types LME models using freely available software. To fully understand the complexities, a comparison of the \textbf{nlme} and \textbf{LME4} \texttt{R} Packages is required.
-
-While the MCS problem is conventionally poised in the context of two methods of measurements, LME models allow for a straightforward analysis whereby several methods of measurement can be measured simulataneously. However Simple models only can only indicate agreement of lack thereof, and the presence of inter-method bias. To consider more complex questions, more complex LME models are required.  Useful approaches, such as Roy (2009) will be introduced in a later section.
-
-%====================================== %
-% - B
-\subsection*{Residual Analysis for LME, Applications to MCS Data}
-
-This short section will look at residual analysis for LME models. The underlying assumptions for LME models are similar to those of classical linear mdoels. There are two key techniques: a residual plot and the normal probability plot. Using the nlme package it is possible to create plots specific to each method. This is useful in determine which methods `disagree` with the rest.
-Analysis of the residuals would determine if the methods of measurement disagree systematically, or whether or not erroneous measurements associated with a subset of the cases are the cause of disagreement.
-Erroneous measurements are incorrect measurements that indicate disagreement between methods that would otherwise be in agreement.
-%======================================================== %
-% PArt C
-\subsection*{Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas}
-In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are particularly useful in the case of MCS problems.
-
-A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case: $(x1,x2,x3,y1,y2,y3)$
-
-\begin{itemize}
-\item Leave One Out - requires we omit one observation (e.g. x1)
-\item Leave Pair Out - we would omit one pair of observation (e.g. x1 and y1)
-\item Leave Case Out - we omit all observations associated with a particular case. (e.g. x1,x2,x3,y1,y2,y3)
-\end{itemize}
-%========================================================= %
-%- D
-\subsection*{Using DFBETAs to assess agreement}
-Suppose an LME model was formulated to model agreement for various (i.e. 2or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.
-
-As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. 
-If the points align along the line of equality, then both methods can be said to be in agreement. 
-If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
-
-The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. A high correlation confirms good agreement. The Bonferroni Outlier Test and Cook's Distance values can be used to identify unusual cases, when the relationship is modelled as a classical linear model. A test for non-constant variance may also be applied.
- 
-
-Deming Regression can be used to corroborate equality. Significance test for Deming regression estimates are not available, but 95\% bootstrap confidence intervals for the slope estimate and intercept estimates can be computed.
-
-
-Additionally a mean difference plot can be used to identify outliers. This mean-difference plot differs from the Bland-Altman plot in that the plot is denominated in terms of dfbeta values, and not in measurement units.
-
-If lack of agreement is indicated between methods of measurement, use of Roy's Testing is advised.(next section) 
- %========================================================= %
-%% - Part E
-\subsection*{Using Roy's Test to Identify cause of Lack of agreement}
-
-Barnhart specifies three conditions for method of measurement that are required for two methods of measurement to be considered in agreement.
-
-\begin{itemize}
-\item[(i)] No Significant Inter-method bias
-\item[(ii)] No significant Difference in Within-Subject Variance
-\item[(iii)] No significant Difference in Within-Subject Variance 
-\end{itemize}
-  
-
-Roy(2009) demonstrates a LME model specification, and a series of tests that look at each of the criteria individually. If two methods of measuement lack agreement, the specific reason for this lack of agreement can be pinpointed.
-
-%============================================== %
-%- F:
-\subsection*{Using Roy's Model to Compute LoAs and CR }
-
-In this short section, a demonstration of how Roy's technique can be used to compute two common MCS metrics: Limits of Agreement and the Coefficient of Repeatabilty. While Limits of Agreement are not used in 
-the analysis proposed here, there are ubiquituous in literature, and a demonstration on how to compute them with the Roy Model would assist the adoption of this proposed method.
-%============================================== %
-%- G:
-\subsection*{Model Diagnostics for Roy's Models}
-
-Further to previous work, this section revisits case-deletion and residual diagnostics, and explores how approaches devised by Galecki and Burzykowski can be used to appraise Roy's model.
-
-%============================================== %
-% - H: 
-\subsection*{Permutation and Power Tests }
-
-This section explores topics such as dependent variable simulation and Power Analysis (Galecki and Burzykowski) and Permutation testing.
-Using the \textbf{\textit{predictmeans}} \texttt{R} package, it is possible to perform permutation t-tests for coefficients of (fixed) effects and permutation F-tests.
-
-
-%================================================%
-
-
-
-
-
-%============================================================%
 \newpage
 \section{Diagnostic Tools for the nlme package}
 
@@ -331,8 +229,8 @@ blood.red <- blood[!(blood$subject %in% c(68,78,80)),]
 dim(blood.red)
 # 27 observations should be removed.
 
-roy.NLME.red <-lme(BP ~ method-1 , random=~1|subject,data = blood.red)
-plot(roy.NLME.red, resid(., type = "p") ~ fitted(.) | method, abline = 0, id=.05)
+blood.NLME.red <-lme(BP ~ method-1 , random=~1|subject,data = blood.red)
+plot(blood.NLME.red, resid(., type = "p") ~ fitted(.) | method, abline = 0, id=.05)
 \end{verbatim}
 \end{framed}
 
@@ -346,96 +244,6 @@ In this instance, we conclude that there is a systemic diagreement between metho
 \newpage
 
 
-
-\section{Preliminaries: Useful R commands}
-
-
-\texttt{vcov} returns the variance-covariance matrix of the main parameters of a fitted model object.
-\begin{framed}
-	\begin{verbatim}
-	> vcov(JS.roy1)
-	methodJ  methodS
-	methodJ 11.01701  9.30105
-	methodS  9.30105 11.75301
-	\end{verbatim}
-\end{framed}
-
-\texttt{getVarCov} extract the variance-covariance matrix from a fitted model, such as a mixed-effects model.
-\begin{framed}
-	\begin{verbatim}
-	> getVarCov(JS.roy1)
-	Random effects variance covariance matrix
-	methodJ methodS
-	methodJ  923.98  785.23
-	methodS  785.23  971.29
-	Standard Deviations: 30.397 31.166 
-	\end{verbatim}
-\end{framed}	
-\section{\texttt{coef.lme}}
-
-The command \texttt{coef.lme} extract lmes coefficients
-
-
-The estimated coefficients at level i are obtained by adding together the fixed effects estimates and the corresponding random effects estimates at grouping levels less or equal to i. The resulting estimates are returned as a data frame, with rows corresponding to groups and columns to coefficients. Optionally, the returned data frame may be augmented with covariates summarized over groups.
-\begin{framed}
-	\begin{verbatim}
-	> JS.roy1 %>% coef %>% head(10)
-	methodJ   methodS
-	74  84.31724  91.08404
-	36  91.54994  97.05548
-	3   81.16581  96.48653
-	62  92.09493  90.89073
-	31  88.41411 103.38802
-	42  95.56881 104.70922
-	11 103.46092 111.33625
-	41  94.97700 108.08384
-	55  79.44762 110.02055
-	17 101.53470 112.46964
-	\end{verbatim}
-\end{framed}
-Suppose we refit the model, with a reduced data set ( for example, with subject 68 missing)
-
-\begin{framed}
-	\begin{verbatim}
-	x=68
-	datred <- dat[dat$subject !=x,]
-	
-	# datred is other 84 cases (504 observations)
-	
-	JS.roy1.red = lme(BP ~ method-1, 
-	data = datred,
-	random = list(subject=pdSymm(~ method-1)), 
-	weights=varIdent(form=~1|method),
-	correlation = corSymm(form=~1 | subject/repl), 
-	method="ML")
-	\end{verbatim}
-\end{framed}
-
-\begin{framed}
-	\begin{verbatim}
-	> JS.roy1.red %>% coef %>% dim
-	[1] 84  2
-	>
-	> JS.roy1.red %>% coef %>% head(10)
-	methodJ   methodS
-	74  84.31425  90.89550
-	36  91.54526  96.86813
-	3   81.17663  96.36665
-	62  92.07933  90.64629
-	31  88.42473 103.27726
-	42  95.57027 104.56000
-	11 103.46071 111.18930
-	41  94.98491 107.96791
-	55  79.48324 110.02963
-	17 101.53939 112.34591
-	
-	\end{verbatim}
-\end{framed}
-
-
-
-
-%============================================================================ %
 \chapter{Using DFBETAs from LME Models to Assess Agreement}
 	
 	
@@ -513,39 +321,7 @@ Suppose we refit the model, with a reduced data set ( for example, with subject 
 	
 	
 
-	%-------------------------------------------------------------------------------------------------------------------------------------%
-	\subsection{Influential Observations : DFBeta and DFBetas}
-	% http://stats.stackexchange.com/questions/22161/how-to-read-cooks-distance-plots
-	% Cook's distance refers to how far, on average, predicted y-values will move if the observation in question is dropped from the data set. 
-	The dfbeta refers to how much a parameter estimate changes if the observation or case in question is dropped from the data set.  Cook's distance is presumably more important to you if you are doing predictive modeling, whereas dfbeta is more important in explanatory modeling.
-	\subsection{DFBETA} %1.16.3
-	DFBETAS (standardized difference of the beta) is a measure that standardizes the absolute difference in parameter estimates between a (mixed effects) regression model based on a full set of data, and a model from which a (potentially influential) subset of data is removed.
-	%% -\subsection{DFBETA} %1.16.3
-		\texttt{dfbeta()}
-		
-		
-		The DFBETAS statistics are the scaled measures of the change in each parameter estimate and are calculated by deleting the th observation:
-		
-		where  is the th element of .
-		In general, large values of DFBETAS indicate observations that are influential in estimating a given parameter. Belsley, Kuh, and Welsch (1980) recommend 2 as a general cutoff value to indicate influential observations and  as a size-adjusted cutoff.
-		
-	\begin{eqnarray}
-	DFBETA_{a} &=& \hat{\beta} - \hat{\beta}_{(a)} \\
-	&=& B(Y-Y_{\bar{a}}
-	\end{eqnarray}
-	In the case of method comparison studies, there are two covariates, and one can constru
-	ct catterplots of the pairs of dfbeta values accordingly, both for LOO and LSO calculations. Furthermore 95\% confidence ellipse can be constructed around these scatterplots.
-	Note that with k covariates, there will be $k+1$ dfbetas (the intercept,$\beta_0$, and 1 $\beta$ for each covariate). For example there would be 2 sets of of dfbeta, 510 valoues for each in the case of LOO, and 85 for LSO diagnostics.
-	
-	
-	%-------------------------------------------------------------------------------------------------------------------------------------%
-	
-	\subsection{DFFITS} %1.16.1
-	DFFITS is a statistical measured designed to a show how influential an observation is in a statistical model. 
-	\begin{displaymath} DFFITS = {\widehat{y_i} -
-		\widehat{y_{i(k)}} \over s_{(k)} \sqrt{h_{ii}}} \end{displaymath}
-	It is closely related to the studentized residual. For the sake of brevity, we will concentrate on the Studentized Residuals.
-	%===================================================================================== %
+
 	\subsection{PRESS} %1.16.2
 	The prediction residual sum of squares (PRESS) is an value associated with this calculation. When fitting linear models, PRESS can be used as a criterion for model selection, with smaller values indicating better model fits.
 	\begin{equation}
@@ -628,31 +404,7 @@ Likelihood based estimation methods, such as ML and REML, are sensitive to unusu
 	\item Remove one or more data points from the analysis and compute updated estimates of model parameters.
 	\item Based on full- and reduced-data estimates, contrast quantities of interest to determine how the absence of the observations changes the analysis.
 \end{enumerate}
-\subsection{Measures of Influence} 
-% DFBETA
-% DFFITS
-% PRESS
-The impact of an observation on a regression fitting can be determined by the difference between the estimated regression coefficient of a model with all observations and the estimated coefficient when the particular observation is deleted. DFBETA and DFFITS are well known measures of influenc. The measure DFBETA is the studentized value of this difference.	DFFITS is a statistical measured designed to a show how influential an observation is in a statistical model. DFFITS is closely related to the studentized residual.
 
-\begin{eqnarray}
-DFBETA_{a} &=& \hat{\beta} - \hat{\beta}_{(a)} \\
-&=& B(Y-Y_{\bar{a}}
-\\ DFFITS = {\widehat{y_i} -
-	\widehat{y_{i(k)}} \over s_{(k)} \sqrt{h_{ii}}} 
-\end{eqnarray}
-
-The prediction residual sum of squares (PRESS) is an value associated with this calculation. When fitting linear models, PRESS can be used as a criterion for model selection, with smaller values indicating better model fits.
-\begin{displaymath}
-PRESS = \sum(y-y^{(k)})^2
-\end{displaymath}
-%	
-%	\begin{itemize}
-%		\item $e_{-Q} = y_{Q} - x_{Q}\hat{\beta}^{-Q}$
-%		\item $PRESS_{(U)} = y_{i} - x\hat{\beta}_{(U)}$
-%	\end{itemize}
-%	
-
-\newpage
 \subsection{Local Influence Analysis}
 
 

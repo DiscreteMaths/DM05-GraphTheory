@@ -1,5 +1,19 @@
 \documentclass[Main.tex]{subfiles}
 \begin{document}
+%====================%
+% Diagnostics with nlmeU
+\newpage
+\subsection*{Leave-One-Out Diagnostics with \texttt{lmeU}}
+Galecki et al discuss the matter of LME influence diagnostics in their book, although not into great detail.
+
+
+The command \texttt{lmeU} fits a model with a particular subject removed. The identifier of the subject to be removed is passed as the only argument
+
+A plot ofthe per-observation diagnostics individual subject log-likelihood contributions can be rendered.
+
+\subsubsection*{Likelihood Displacement}
+%% Page 503 Galecki
+
 \subsection{Likelihood Distances}
 
 The \index{likelihood distance} likelihood distance is a global summary measure that expresses the joint influence of the subsets of observations, $U$, on all parameters in $\phi$ that were subject to updating. For classical linear models, the implementation of influence analysis is straightforward. \citet{schab} points out the likelihood distance gives the amount by which the log-likelihood of the model fitted from the full data changes if one were
