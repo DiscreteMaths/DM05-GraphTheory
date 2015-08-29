@@ -4,7 +4,14 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 \chapter{Using LME Models for Method Comparison Problems}
-The LME model approach has seen increased use as a framework for method comparison studies in recent years (Lai $\&$ Shaio, Carstensen and Choudhary as examples). In part this is due to the increased profile of LME models, and furthermore the availability of capable software. Additionally LME based approaches may utilise the diagnostic and influence analysis techniques that have been developed in recent times.
+%----------------------------------------------------------------------------------------%
+
+\newpage
+\section{Using LMEs for Method Comparison}
+The LME model approach has seen increased use as a framework for method comparison studies in recent years (Lai $\&$ Shaio, Carstensen and Choudhary as examples)
+
+\citet{BXC2008} remarks upon `by-hand' approaches advocated in \citet{BA99} discouragingly, describing them as tedious, unnecessary and `outdated'. Due to the prevalence of modern statistical software, \citet{BXC2008} advocates the adoption of computer based approaches to method comparison studies, allowing the use of LME models that would not have been feasible otherwise. Rather than using the `by hand' methods, estimates for required parameters can be gotten directly from output code. Furthermore, using computer approaches removes constraints, such as the need for the design to be perfectly balanced.
+In part this is due to the increased profile of LME models, and furthermore the availability of capable software. Additionally LME based approaches may utilise the diagnostic and influence analysis techniques that have been developed in recent times.
 
 \section{Overview}
 This chapter discusses the use of LME models in Method Comparison problems. 
@@ -36,25 +43,52 @@ Erroneous measurements are incorrect measurements that indicate disagreement bet
 %======================================================== %
 % PArt C
 \subsection*{3. Case Deletion Diagnostics for LME Data: Cooks Distance, DFBetas}
-In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are particularly useful in the case of MCS problems.
+In this section we introduce influence analysis and case deletion diagnosics. A full overview of the topic will be provided although there are specific tools that are particularly useful in the case of MCS problems: specifically the Cook's Distance and the DFBeta.
 
-A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case: $(x1,x2,x3,y1,y2,y3)$
+A discussion of how leave-k-out diagnostics would work in the context of MCS problems is required. There are several scenaros. Suppose we have two methods of measurement X and Y, each with three measurements for a specific case: $(x_1,x_2,x_3,y_1,y_2,y_3)$
 
 \begin{itemize}
-\item Leave One Out - requires we omit one observation (e.g. x1)
-\item Leave Pair Out - we would omit one pair of observation (e.g. x1 and y1)
-\item Leave Case Out - we omit all observations associated with a particular case. (e.g. x1,x2,x3,y1,y2,y3)
+\item Leave One Out - one observation is omitted (e.g. $x_1$)
+\item Leave Pair Out - one pair of observation  is omitted (e.g. $x_1$ and $y_1$)
+\item Leave Case (or Subject) Out - All observations associated with a particular case or subject are omitted. (e.g. $\{x_1,x_2,x_3,y_1,y_2,y_3\}$)
 \end{itemize}
+Other metrics, such as the likelihood distance, will also be introduced, and revisited in a later section.
 %========================================================= %
 %- D
+\newpage
 \subsection*{4. Using DFBETAs to Assess Agreement}
-Suppose an LME model was formulated to model agreement for various (i.e. 2 or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.
+Suppose an LME model was formulated to model agreement for various (i.e. 2 or more) methods of measurement, with replicate measurements. If the methods are to be agreement, the DFBetas for each case would be the same for both methods.\textbf{As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. If the points align along the line of equality, then both methods can be said to be in agreement.}
 
-\textbf{As such, agreement between any two methods can be determined by a simple scatterplot of the DFBetas. If the points align along the line of equality, then both methods can be said to be in agreement.}
+%Cook's Distance can be used to identify and rank cases, in terms of influence.
+For the model fitted to the blood data with the lme4 R package, the results tabulated below can be produced. All 85 subjects are ranked by Cook's Distance (with only the top 6 being presented here). The remaining columns are the DFBeta for each of the fixed effects, for each of the 85 subject.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|} \hline
+Subject &    Cook's D  &    methodJ  &   methodR  & methodS \\ \hline \hline
+78 & 0.61557407 & -0.02934556 & -0.03387780 & 0.2954937  \\ \hline
+80 & 0.41590973 & -0.06305026 & -0.06515241 & 0.2123881  \\ \hline
+68 & 0.22536651 & -0.05334867 & -0.05062375 & 0.1555187  \\ \hline
+72 & 0.09348500  & 0.02388626  & 0.02419887 & 0.1617474  \\ \hline
+48 & 0.08706988  & 0.02147541  & 0.03145273 & 0.1581591  \\ \hline
+30 & 0.07118415  & 0.26925807  & 0.26215970 & 0.1581569  \\ \hline
+\end{tabular} 
+\end{center}
+\newpage
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\linewidth]{images/04-DFbetaplots}
+% \caption{}
+% \label{fig:04-DFbetaplots}
+\end{figure}
 
-If they appear not to be agreement, asubsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement.
+In the first of the three plots (\textit{Top Right}), strong agreement between method J and method R is indicated. The other plots indicate lack of agreement of methods J and R with method S.
+
+
+
+If lack of agreement is indicated, a subsequent analysis using a technique proposed by Roy(2009) can be used to identify the specific cause for this lack of agreement (see next section).
+\newpage
 
 The Pearson Correlation coefficient of the DFBetas can be used in conjection with this analysis. A high correlation confirms good agreement. No threshold value for agreement is suggested, and analysts are advised to perform model diagnostics regardless of the correlation coeffient. 
+
 
 The Bonferroni Outlier Test and Cook's Distance values can be used to identify unusual cases, when the relationship between sets of dfbeta is modelled as a (classical) linear model. In this model, the covariates should be homoskedastic. A test for non-constant variance may be used to verify this. These diagnostic procedures are implementable using the \textbf{\textit{car}} R package.
  
@@ -64,6 +98,13 @@ Deming Regression can be used to verify the line of equality. Significance test 
 Additionally a mean difference plot can be used to identify outliers. This mean-difference plot differs from the Bland-Altman plot in that the plot is denominated in terms of dfbeta values, and not in measurement units.
 
 If lack of agreement is indicated between methods of measurement, use of Roy's Testing is advised (This is the subject of the next section).
+\begin{figure}[h1]
+\centering
+\includegraphics[width=0.7\linewidth]{images/04-TMDplot}
+\caption{}
+\label{fig:04-TMDplot}
+\end{figure}
+\newpage
  %========================================================= %
 %% - Part E
 \subsection*{5. Using Roy's Test to Identify cause of Lack of agreement}
@@ -106,8 +147,31 @@ The coefficient of repeatability is encountered in Gage R \& R analysis. \textit
 Further to previous work, this section revisits case-deletion and residual diagnostics, and explores how approaches devised by  Galecki \& Burzykowski (2013) can be used to appraise Roy's model. These authors specifically look at Cook's Distances and Likelihood Distances.
 For the Roy Model, Cook's Distances may also be generated using the \textbf{\textit{predictmeans}}
 
-As the model is structurally different from the models discussed in the earlier sections, Residual analysis will be briefly revisited.
 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{images/CooksDistancePlot-JS-Roy}
+\caption{}
+\label{fig:CooksDistancePlot-JS-Roy}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{images/LogLik-JS-Roy}
+\caption{}
+\label{fig:LogLik-JS-Roy}
+\end{figure}
+
+As the model is structurally different from the models discussed in the earlier sections, Residual analysis will be briefly revisited.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{images/Residuals-JS-Roy}
+\caption{}
+\label{fig:Residuals-JS-Roy}
+\end{figure}
+
+\newpage
 \subsection*{8. Case Deletion Diagnostics for the Variance Ratios}
 %- H Case Deletion Diagnostics 
 

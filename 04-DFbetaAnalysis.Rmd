@@ -7,6 +7,7 @@ output: html_document
 ```{r}
 #using package NLME
 library(nlme)
+library(MethComp)
 library(lme4)
 source("data/BloodData.R")
 ```
@@ -48,18 +49,42 @@ head(Infldf)
 
 ```{r}
 par(mfrow=c(2,2))
-plot(Infldf$methodJ,Infldf$methodR,col="red",pch=16)
+plot(Infldf$methodJ,Infldf$methodR,col="red",pch=16,xlab=c("method J"),ylab=c("method R"))
 abline(c(0,1))
 
-plot(Infldf$methodJ,Infldf$methodS,col="red",pch=16)
+plot(Infldf$methodJ,Infldf$methodS,col="red",pch=16,xlab=c("method J"),ylab=c("method S"))
 abline(c(0,1))
 
-plot(Infldf$methodR,Infldf$methodS,col="red",pch=16)
+plot(Infldf$methodR,Infldf$methodS,col="red",pch=16,xlab=c("method R"),ylab=c("method S"))
 abline(c(0,1))
 
 par(mfrow=c(1,1))
 ```
 
+```{r}
+corr.measures(Infldf$methodR,Infldf$methodS)
+corr.measures(Infldf$methodJ,Infldf$methodS)
+corr.measures(Infldf$methodR,Infldf$methodJ)
+```
+```{r}
+attach(Infldf)
+X<-methodJ;  Y<- methodS
+A <- (X+Y)/2;  D<- (X-Y)
+muD <- mean(D)
+plot(A,D,pch=15,col="blue",cex=0.8)
+abline(h=muD,col="blue",lwd=2)
+title("Tukey Mean Difference Plots")
+X<-methodJ;  Y<- methodR
+A <- (X+Y)/2;  D<- (X-Y)
+muD <- mean(D)
+points(A,D,pch=16,col="red",cex=0.8)
+abline(h=muD,col="red",lwd=2)
+
+
+
+detach(Infldf) 
+
+```
 ```{r}
 library(car)
 library(gvlma)
