@@ -23,8 +23,8 @@ blood = groupedData( BP ~ method | subject ,
 ```
 #### Fit an LME4 Model to the data
 ```{r}
-roy.LME4 = lmer(BP ~ method-1 + (1 |subject ), data = blood,REML = FALSE)
-summary(roy.LME4)
+sbp.LME4 = lmer(BP ~ method-1 + (1 |subject ), data = blood,REML = FALSE)
+summary(sbp.LME4)
 #intervals(roy.LME4a)
 ```
 #### Construct DFBETAs for LME4 Model
@@ -32,21 +32,43 @@ summary(roy.LME4)
 ```{r}
 library(influence.ME)
 library(dplyr)
-roy.LME4.inf  <- influence(roy.LME4, "subject")
-CDs<- cooks.distance(roy.LME4.inf)
-case<- rownames(cooks.distance(roy.LME4.inf))
+
+```
+```{r}
+MCS.LME4.inf  <- influence(sbp.LME4, "subject")
+CDs<- cooks.distance(MCS.LME4.inf)
+DFBs <- dfbetas(MCS.LME4.inf)
+```
+```{r}
+case<- rownames(cooks.distance(MCS.LME4.inf))
 CDdf <- data.frame(case,CDs)
 CDdf<- arrange(CDdf,desc(CDs))
 head(CDdf)
-dfbeta <- dfbetas(roy.LME4.inf)
-case <- rownames(dfbetas(roy.LME4.inf))
-DFBetadf <- data.frame(case,dfbeta)
+```
+
+```{r}
+case <- rownames(dfbetas(MCS.LME4.inf))
+DFBetadf <- data.frame(case,DFBs)
 Infldf <- inner_join(CDdf,DFBetadf)
 Infldf<- arrange(Infldf,desc(CDs))
 rownames(Infldf) <- Infldf$case
 head(Infldf)
 ```
 
+```{r}
+
+plot(Infldf$methodJ,Infldf$methodR,col="red",pch=16,xlab=c("method J"),ylab=c("method R"))
+abline(c(0,1))
+```
+```{r}
+plot(Infldf$methodJ,Infldf$methodS,col="red",pch=16,xlab=c("method J"),ylab=c("method S"))
+abline(c(0,1))
+```
+```{r}
+plot(Infldf$methodR,Infldf$methodS,col="red",pch=16,xlab=c("method R"),ylab=c("method S"))
+abline(c(0,1))
+
+```
 ```{r}
 par(mfrow=c(2,2))
 plot(Infldf$methodJ,Infldf$methodR,col="red",pch=16,xlab=c("method J"),ylab=c("method R"))
