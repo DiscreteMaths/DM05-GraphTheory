@@ -9,6 +9,7 @@ JS.roy1 <- load("JS.roy1.rda")
 JS.roy1.dfbeta <- read.csv("JS.roy1.dfbeta.csv")
 ```
 
+### The Usefulness of this analysis is no longer accepted.
 ```{r}
 summary(JS.roy1)
 head(JS.roy1.dfbeta)

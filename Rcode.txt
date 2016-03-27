@@ -1,6 +1,9 @@
-setwd("C:/Users/Kevin/Documents/GitHub/LMEs-Galecki")
+#setwd("C:/Users/Kevin/Documents/GitHub/LMEs-Galecki")
+
+setwd("C:/Users/Computer Six/Documents/GitHub/LMEs-Galecki")
 #using package NLME
 library(nlme)
+library(magrittr)
 source("data/BloodData.R")
 
 ### Working on the JS comparison
@@ -16,15 +19,9 @@ blood = groupedData( BP ~ method | subject ,
 
 
 # consider on methods "J" and "S"
-dat = subset(blood, subset = method != "R") # fixed-effects X_i with(subset(dat, subset = subject == "1"), model.matrix(BP ~ method)) # random-effects Z_i with(subset(dat, subset = subject == "1"), model.matrix( ~ method -1))
+dat = subset(blood, subset = method != "R") 
 
-
-# consider J and S groups only:
-# J.sd = c(with(subset(blood, subset = method == "J"), by(BP, subject, sd))) 
-# S.sd = c(with(subset(blood, subset = method == "S"), by(BP, subject, sd)))
-# min(J.sd) ; max(J.sd)
-# min(S.sd) ; max(S.sd)
-# plot(J.sd, S.sd)
+###########################################################################################################
 
 
 

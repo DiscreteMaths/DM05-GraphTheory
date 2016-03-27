@@ -4,7 +4,7 @@ author: "Kevin O'Brien"
 date: "Thursday, July 09, 2015"
 output: html_document
 ---
-```{r}
+```{r,echo=FALSE}
 #using package NLME
 library(nlme)
 library(predictmeans)
@@ -12,7 +12,7 @@ source("data/BloodData.R")
 ```
 
 ### Working on the JS comparison
-```{r}
+```{r,echo=FALSE}
 blood = groupedData( BP ~ method | subject ,
   data = data.frame( BP = c(Blood), 
     subject = rep(seq(nrow(Blood)), ncol(Blood)),
@@ -23,12 +23,12 @@ blood = groupedData( BP ~ method | subject ,
 ```
 
 ### Working on the JS comparison
-```{r}
+```{r,echo=FALSE}
 # consider on methods "J" and "S"
-dat = subset(blood, subset = method != "R") # fixed-effects X_i with(subset(dat, subset = subject == "1"), model.matrix(BP ~ method)) # random-effects Z_i with(subset(dat, subset = subject == "1"), model.matrix( ~ method -1))
+dat = subset(blood, subset = method != "R") 
 ```
 #### Fitting LME Models
-```{r}
+```{r,echo=FALSE}
 JS.roy1 = lme(BP ~ method-1, data = dat,random = list(subject=pdSymm(~ method-1)), weights=varIdent(form=~1|method),correlation = corSymm(form=~1 | subject/repl), method="ML")
 
 ```
