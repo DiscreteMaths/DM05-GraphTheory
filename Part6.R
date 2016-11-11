@@ -43,32 +43,18 @@ blood = groupedData( BP ~ method | subject ,
   	repl = rep(rep(c(1:3), rep(nrow(Blood), 3)), 3) ),
 	labels = list(BP = "Systolic Blood Pressure", method = "Measurement Device"),
 	)
-#```
 
-
-
-#```{r,echo=FALSE}
-#pick out two of the three methods ( use J and J1 ) 
 		
 dat = subset(blood, subset = method != "R")
+
+
 samplesize = sample(10:85,1)
 dat = sample_n(dat,samplesize)
 samplesize
 
-#```
+sbp.LME4 = lmer(BP ~ method-1 + (1 |subject ), data = blood,REML = FALSE)
+MCS.LME4.inf  <- influence(sbp.LME4, "subject")
+CDs<- cooks.distance(MCS.LME4.inf)
+DFBs <- dfbetas(MCS.LME4.inf)
 
-
-
-#```{r,echo=FALSE}
-
-MCS1 = lme(BP ~ method-1, data = dat,
-random = list(subject=pdSymm(~ method-1)),
-weights=varIdent(form=~1|method),
-correlation = corSymm(form=~1 | subject/repl), method="ML")
-
-#```
-
-#```{r}
-BSVR = getD(MCS1)[1,1] / getD(MCS1)[2,2]
-BSVR
 #```

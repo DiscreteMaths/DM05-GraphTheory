@@ -73,9 +73,7 @@ random = list(subject=pdSymm(~ method-1)),
 weights=varIdent(form=~1|method),
 correlation = corSymm(form=~1 | subject/repl), method="ML")
 
-```
 
-```{r}
 BSVR = getD(MCS1)[1,1] / getD(MCS1)[2,2]
 BSVR
 ```
