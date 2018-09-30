@@ -1,0 +1,161 @@
+Bipartite graph
+%- https://en.wikibooks.org/wiki/Graph_Theory/Definitions#Connectivity
+%-------------------%
+A graph ${\displaystyle G=(V,E)}$ is bipartite if the vertex set ${\displaystyle V}$ 
+ can be partitioned into two disjoint subsets such that for every edge 
+${\displaystyle (u,v)\in E}$,  
+u {\displaystyle u} 
+ and 
+v {\displaystyle v} 
+ are in opposite subsets. 
+Additionally, a graph is bipartite if and only if it contains no odd cycles. 
+%-------------------%
+\subsection*{Proof: }
+Let 
+G = ( V , E ) {\displaystyle G=(V,E)} 
+ be an arbitrary and fixed graph with an odd cycle.
+G {\displaystyle G} 
+ is bipartite 
+⟹ G {\displaystyle \Longrightarrow G} 
+ contains no odd cycles 
+Assume for the sake of contradiction that 
+G {\displaystyle G} 
+ contains an odd cycle.
+Let 
+G 1 , G 2 {\displaystyle G_{1},G_{2}} 
+ be two disjoint subsets that form a bipartition on 
+G {\displaystyle G} 
+.
+Choose an odd cycle 
+C {\displaystyle C} 
+ in 
+G {\displaystyle G} 
+and, without loss of generality, choose some node 
+v 1 ∈ C {\displaystyle v_{1}\in C} 
+ from 
+G 1 {\displaystyle G_{1}} 
+. Traverse 
+C {\displaystyle C} 
+ starting from 
+v 1 {\displaystyle v_{1}} 
+, noting that each node is in the different subset 
+G 1 , G 2 {\displaystyle G_{1},G_{2}} 
+ from its neighbors by definition of a bipartite graph.
+The last node in this traversal, 
+v n {\displaystyle v_{n}} 
+, must be in 
+G 1 {\displaystyle G_{1}} 
+, as 
+C {\displaystyle C} 
+ is an odd cycle. However, 
+v n {\displaystyle v_{n}} 
+ is adjacent to 
+v 1 {\displaystyle v_{1}} 
+ by definition of a cycle, which is a contradiction as 
+G 1 {\displaystyle G_{1}} 
+ contains two adjacent nodes, so 
+G {\displaystyle G} 
+ cannot contain an odd cycle.
+As we have looked at an arbitrary 
+C {\displaystyle C} 
+ and chose 
+v {\displaystyle v} 
+ without loss of generality from 
+G 1 {\displaystyle G_{1}} 
+, we have proven the implication.
+G {\displaystyle G} 
+ contains no odd cycles 
+⟹ G {\displaystyle \Longrightarrow G} 
+ is bipartite 
+We present an algorithm to sort the nodes into two disjoint sets. 
+Fix an arbitrary node 
+v ∈ V {\displaystyle v\in V} 
+.
+For each node 
+x {\displaystyle x} 
+ in the graph, calculate the shortest path from 
+x {\displaystyle x} 
+ to 
+v {\displaystyle v} 
+.
+Let 
+A , B {\displaystyle A,B} 
+ be the sets of nodes such that the shortest path from 
+x {\displaystyle x} 
+ to 
+v {\displaystyle v} 
+ are even and odd respectively.
+We look without loss of generality at 
+A {\displaystyle A} 
+ to prove this algorithm's correctness.
+Assume for the sake of contradiction two nodes 
+v 1 , v 2 ∈ A {\displaystyle v_{1},v_{2}\in A} 
+ are adjacent. Let 
+P 1 , P 2 {\displaystyle P_{1},P_{2}} 
+ represent the shortest paths from 
+v {\displaystyle v} 
+ to 
+v 1 , v 2 {\displaystyle v_{1},v_{2}} 
+ respectively. 
+If 
+P 1 {\displaystyle P_{1}} 
+ and 
+P 2 {\displaystyle P_{2}} 
+ do not intersect, 
+P 1 , ( v 1 , v 2 ) , P 2 {\displaystyle P_{1},(v_{1},v_{2}),P_{2}} 
+ forms a cycle of odd length as 
+P 1 {\displaystyle P_{1}} 
+ and 
+P 2 {\displaystyle P_{2}} 
+ trivially have the same parity, which is a contradiction.
+If 
+P 1 {\displaystyle P_{1}} 
+ and 
+P 2 {\displaystyle P_{2}} 
+ intersect, we choose the intersection 
+v ′ {\displaystyle v'} 
+ closest to 
+v 1 {\displaystyle v_{1}} 
+. Note 
+v ′ {\displaystyle v'} 
+ cannot be either 
+v 1 {\displaystyle v_{1}} 
+ or 
+v 2 {\displaystyle v_{2}} 
+, as the shortest paths from 
+v 1 {\displaystyle v_{1}} 
+ to 
+v 2 {\displaystyle v_{2}} 
+ would not have the same parity. Observe that the distance from 
+v ′ {\displaystyle v'} 
+ to 
+v 1 {\displaystyle v_{1}} 
+ and 
+v 2 {\displaystyle v_{2}} 
+ must be the same length, otherwise the shortest path to either 
+v 1 , v 2 {\displaystyle v_{1},v_{2}} 
+ would travel through the other node. However, this is a contradiction as 
+( v ′ , v 1 ) , ( v 1 , v 2 ) , ( v ′ , v 2 ) {\displaystyle (v',v_{1}),(v_{1},v_{2}),(v',v_{2})} 
+ would be an odd cycle.
+Therefore, no two nodes in 
+A {\displaystyle A} 
+ can be adjacent, and as we looked at 
+A {\displaystyle A} 
+ without loss of generality, we have proven the algorithm correct and therefore the reverse implication.
+
+%-------------------%
+\section{Complete Bipartite Graph}
+
+The complete bipartite graph 
+K m , n {\displaystyle K_{m,n}} 
+ is the graph composed of two disjoint subsets 
+A , B {\displaystyle A,B} 
+ of cardinality 
+m , n {\displaystyle m,n} 
+ respectively, such that 
+K m , n {\displaystyle K_{m,n}} 
+ contains an edge between each node in 
+A {\displaystyle A} 
+ and every node in 
+B {\displaystyle B} 
+. 

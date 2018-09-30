@@ -1,0 +1,143 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\begin{document}
+
+%http://webwhompers.com/graph-theory.html
+\section{Graph Theory}
+%-------------------------------- %
+Example 5.5 A graph can be used in chemistry to model the structure of a molecule. In this
+model, the atoms of the elements composing the molecule are taken as the vertices of the graph
+and the edges represent the chemical bonds between pairs of atoms. So for example, a graph model
+of the water molecule $H_2O$ would have three vertices and two edges. The degree of a vertex is the
+valency of the atom it represents. 
+%-------------------------------- %
+Since an early use of graph theory (by Arthur Cayley, in the
+mid 19th century) was to count the number of different isomers of some of the hydrocarbons, the
+term valency was initially used instead of degree of a vertex, and you will still find this usuage in
+some text books. 
+%-------------------------------- %
+We next investigate the connection between the number of edges in a graph and the degrees of
+the vertices. If, for each of the graphs shown Figures 5.1, 5.2 and 5.3, you sum the degrees of the
+vertices and compare this sum with the number of edges of the graph, you should find that the
+following result holds.
+%-------------------------------- %
+Result 5.3 
+\subsection*{Degrees}
+Let G be a graph. Then the sum of the degrees of the vertices of G is equal to twice
+the number of edges of G.
+%-------------------------------- %
+Proof. Let e be any edge of G and suppose that the endpoints of e are u and v. Then e contributes
+1 both to deg(u) and to deg(v). (If e is a loop, then u = v and e contributes 2 to deg(u)). Thus
+every edge contributes 2 to the sum of the degrees of the vertices, giving the result. 2
+% 5.4.1 
+%-------------------------------- %
+Example 5.6 A graph can be used to model acquaintanceship between pairs of people in a group.
+In this model, each person in the group is represented by a vertex. Two vertices in the graph are
+joined by an edge if and only if the two people they represent know one another. 
+%-------------------------------- %
+Thus the number of edges in this graph gives the number of pairs of people in the group who know one another.
+(Note that in order to be useful, acquaintance graphs are simple graphs; that is, we do not record
+the obvious fact that each person knows himself or herself by putting a loop at each vertex.)
+Suppose that there are ten people in the group and we ask each of them how many other people
+in the group they are acquainted with. Suppose they give us the following numbers:
+\[2, 5, 6, 6, 4, 3, 9, 1, 7, 5\].
+%-------------------------------- %
+We cannot construct the acquaintance graph from this information alone, because we do not know
+which other people in the group each person knows.
+
+However, we can calculate the number of
+edges in the graph from just the information given. This is because the number of acquaintances
+of a given member of the group gives us the degree of the vertex representing her or him. Summing
+the sequence of numbers given above, we obtain
+\[2 + 5 + 6 + 6 + 4 + 3 + 9 + 1 + 7 + 5 = 48.\]
+
+Hence, using Result 5.3, the number of different pairs of acquaintances in the group is 48/2 = 24.
+
+%-------------------------------- %
+\subsection*{Degree Sequence}
+Definition 5.4 \textbf{The degree sequence }of a graph G is the sequence formed from the degrees of its
+vertices, usually arranged in descending order of size.
+
+%-------------------------------- %
+Example 5.7 The degree sequence for the acquaintance graph described in Example 5.6 is:
+\[9, 7, 6, 6, 5, 5, 4, 3, 2, 1.\]
+
+%-------------------------------- %
+\subsection*{ Paths }
+
+Definition 5.10 A path is an alternating sequence of vertices and edges of the form 
+                                  \[v_1 e_1v_2 e_2v_3 \ldots e_{k-1}v_k,\] 
+where ei is the edge joining vi to vi+1, and all the vertices and all the edges are distinct. Note that in a simple graph, there is at most one edge joining any pair of vertices and so a path can be specified just by a sequence of distinct vertices.
+%----------------------------------------%
+
+Definition 5.11 The \textbf{length} of a path is the number of edges in it.
+
+A common mistake is to take the number of vertices in a path as its length instead of the number of edges.
+
+
+%----------------------------------------%
+%5.4.3 
+\subsection*{Connectivity}
+
+Definition 5.13 Two vertices u, v in a graph G are said to be connected if there is a 
+path in G from u to v. The graph G is said to be connected if every pair of vertices are 
+connected; otherwise, G is said to be disconnected.
+
+Example 5.19 
+
+You can visualize a connected graph as being one that is "\textit{\textbf{all in one piece}}''. The separate connected parts of a disconnected graph are called its connected components. Thus the graph shown in Figure 5.3 has 2 connected components; every connected graph has just one connected component, the graph itself.
+
+	
+%----------------------------------------%
+% 5.5 
+\subsection*{Isomorphism of graphs}
+
+Learning objectives
+When you have completed this section, you should be able to:
+
+state the definition of graph isomorphism;
+decide whether two given graphs on n vertices (for small values of n) are isomorphic and justify your decision.
+
+
+%----------------------------------------%
+%5.6.1
+\subsection*{ The adjacency matrix of a graph}
+
+While graphs are useful for modelling many different applications, the diagrammatic representations we have been discussing are not easily understood by computers. The most common way to represent a graph within a computer is as a square array of numbers, each number representing the number of edges joining a pair of vertices.
+
+Definition 5.17 Suppose that G is a graph with n vertices, numbered $1, 2, \ldots , n$. Then the adjacency matrix A(G) of G is a square $n \times n$ array, with rows and columns numbered $1, 2, \ldots , n$ such that the entry in row i and column j is the number of edges joining vertex i to vertex j.
+
+% Example 5.23 
+%----------------------------------------%
+
+\subsection*{Square Matrices}
+Definition 5.18 The diagonal line of cells from the top left hand cell to the bottom right hand cell of a square matrix is called the main diagonal. A square matrix is called symmetric if the entries in row i are the same as the entries in column i, for $i = 1, 2, \ldots , n$.
+
+The adjacency matrix of a graph is always symmetric because the number of edges joining vertex i to vertex j is equal to the number of edges joining vertex j to vertex i. Geometrically, the symmetry of the matrix is about the main diagonal. Note that the entries on the main diagonal record the number of loops at each vertex.
+
+%==============================================================================================%
+%-https://en.wikibooks.org/wiki/Graph_Theory/Definitions#Distance_in_a_Graph
+
+Walk, closed walk, circuit and cycle[edit]
+A u-v walk is defined as a sequence of vertices starting at u and ending at v, where consecutive vertices in the sequence are adjacent vertices in the graph
+
+A drawing of a labelled graph on 6 vertices and 7 edges.
+A closed walk is a walk in which the first and last vertices are the same
+A u-v trail is a u-v walk, where no edge is repeated (each edge is used at most once)
+A circuit or closed trail is a trail in which the first and last vertices are the same
+A u-v path is a u-v walk, where no vertex is repeated (each vertex is used at most once)
+A cycle is a closed path in which the first and last vertices are the same
+For example, in the image to the right, (6,4,5,1) is a walk. While (4,5,2,3,4), and (1,5,2,1) are cycles.
+
+
+%----------------------------------------%
+%5.6.2 
+\subsection*{Adjacency lists}
+
+In some large graphs, each vertex may only be adjacent to relatively few other vertices. In this case, a high proportion of the entries in the adjacency matrix will be zero, which is wasteful of storage space. An alternative method of storing a simple graph is to use a set of adjacency lists. First, we list the vertices of the graph; then, after each vertex, we put a colon and list the vertices that it is adjacent to. The procedure is illustrated in the example below.
+%----------------------------------------%
+\end{document}
