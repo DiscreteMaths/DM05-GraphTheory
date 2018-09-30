@@ -1,0 +1,60 @@
+CHAPTER 5. INTRODUCTION TO GRAPH THEORY 78 
+Example 5.17 The adjacencey lists for the graph shown in Figure 5.2 are as follows. 
+U : V 
+v: Wi X 
+W : V,1 
+X : v,w. 
+5.5 Exercises 5 
+0 
+1. For the graph shown below, find: 
+(a) all the edges incident with vi; 
+(b) all the vertices adjacent to v3; 
+(c) all the edges adjacent to e2; 
+(d) all the loops; 
+(e) the number of its connected components; 
+(f) deg(v4), deg(v6) and deg(v8); 
+(g) the degree sequence of the graph; 
+(h) all the cycles of lengths 2, 3 and 4 respectively. 
+C4 
+V7 
+C9 
+eia 
+2. In each of the following cases, either construct a graph with the specified properties or say 
+why it is not possible to do so. 
+(a) A graph with degree sequence 3, 3, 2,1. 
+(b) A simple graph with degree sequence 3, 3, 2, 1, 1. 
+(c) A simple graph with degree sequence 4, 3, 2, 1. 
+(d) A simple 3-regular graph with 6 vertices. 
+3. Say why every graph has an even number of vertices of odd degree. 
+4. Suppose that eight sites are connected in a network. The number of other sites to which each 
+site has a direct connection is given by the following sequence. 
+5,3,2,7,1,2,6,4. 
+(a) Describe how a. communications network such as this can be modelled by a graph, saying 
+what the vertices represent and when two vertices are adjacent. 
+(b) What information about the graph is given by the sequence of numbers above? 
+(c) Find how many pairs of sites have a. direct connection between them, giving a brief 
+explanation of your method. 
+(d) Say why it is impossible to construct a network with 9 sites, in which each site has a 
+direct connection to exactly 5 of the other sites. 
+
+
+
+
+
+
+
+CHAPTER 5. INTRODUCTION TO GRAPH THEORY 79 
+5. (a) Sketch the complete graph K5. What is the degree of each vertex? How many edges does it have? (b) What is the degree of each vertex of the complete graph Kn? How many edges does it have? 
+6. Arc the graphs G and H shown below isomorphic? If you think they are isomorphic, label each vertex of H with the same letter as the corresponding vertex in G. Otherwise, give a reason why the two graphs are not isomorphic. 
+
+H 
+7. Draw two simple non-isomorphic graphs with degree sequence 3, 2, 2,1,1, 1. Give a reason why the graphs you have drawn are not isomorphic. 8. Construct an adjacency matrix A(G) for the graph G shown below. 
+
+(a) What information does the sum of the elements in any row of A(G) give you about the graph G? (b) What information does the sum of all the elements in the matrix tell you about G? (c) Would these rules hold in the case of a graph with loops? 
+
+
+
+
+
+
+
