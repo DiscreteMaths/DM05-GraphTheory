@@ -1,0 +1,130 @@
+\section{Graph Theory - Connectivity}
+
+% %- https://www.tutorialspoint.com/graph_theory/graph_theory_connectivity.htm
+ 
+ Previous Page Next Page  
+Whether it is possible to traverse a graph from one vertex to another is determined by how a graph is connected. Connectivity is a basic concept in Graph Theory. Connectivity defines whether a graph is connected or disconnected. It has subtopics based on edge and vertex, known as edge connectivity and vertex connectivity. Let us discuss them in detail.
+
+\subsection{Connectivity}
+A graph is said to be connected if there is a path between every pair of vertex. From every vertex to any other vertex, there should be some path to traverse. That is called the connectivity of a graph. A graph with multiple disconnected vertices and edges is said to be disconnected.
+
+Example 1
+In the following graph, it is possible to travel from one vertex to any other vertex. For example, one can traverse from vertex ‘a’ to vertex ‘e’ using the path ‘a-b-e’.
+
+Connectivity
+Example 2
+In the following example, traversing from vertex ‘a’ to vertex ‘f’ is not possible because there is no path between them directly or indirectly. Hence it is a disconnected graph.
+
+Connectivity 1
+Cut Vertex
+Let ‘G’ be a connected graph. A vertex V ∈ G is called a cut vertex of ‘G’, if ‘G-V’ (Delete ‘V’ from ‘G’) results in a disconnected graph. Removing a cut vertex from a graph breaks it in to two or more graphs.
+
+Note − Removing a cut vertex may render a graph disconnected.
+
+A connected graph ‘G’ may have at most (n–2) cut vertices.
+
+Example
+In the following graph, vertices ‘e’ and ‘c’ are the cut vertices.
+
+Cut Vertex
+By removing ‘e’ or ‘c’, the graph will become a disconnected graph.
+
+Cut Vertices with eCut Vertices without e
+Without ‘g’, there is no path between vertex ‘c’ and vertex ‘h’ and many other. Hence it is a disconnected graph with cut vertex as ‘e’. Similarly, ‘c’ is also a cut vertex for the above graph.
+
+\subsection{Cut Edge (Bridge)}
+Let ‘G’ be a connected graph. An edge ‘e’ ∈ G is called a cut edge if ‘G-e’ results in a disconnected graph.
+
+If removing an edge in a graph results in to two or more graphs, then that edge is called a Cut Edge.
+
+Example
+In the following graph, the cut edge is [(c, e)]
+
+Cut Edge
+By removing the edge (c, e) from the graph, it becomes a disconnected graph.
+
+Cut with EdgeCut without Edge
+In the above graph, removing the edge (c, e) breaks the graph into two which is nothing but a disconnected graph. Hence, the edge (c, e) is a cut edge of the graph.
+
+Note − Let ‘G’ be a connected graph with ‘n’ vertices, then
+
+a cut edge e ∈ G if and only if the edge ‘e’ is not a part of any cycle in G.
+
+the maximum number of cut edges possible is ‘n-1’.
+
+whenever cut edges exist, cut vertices also exist because at least one vertex of a cut edge is a cut vertex.
+
+if a cut vertex exists, then a cut edge may or may not exist.
+
+\subsection{Cut Set of a Graph}
+Let ‘G’= (V, E) be a connected graph. A subset E’ of E is called a cut set of G if deletion of all the edges of E’ from G makes G disconnect.
+
+If deleting a certain number of edges from a graph makes it disconnected, then those deleted edges are called the cut set of the graph.
+
+Example
+Take a look at the following graph. Its cut set is E1 = {e1, e3, e5, e8}.
+
+Cut Set of a Graph
+After removing the cut set E1 from the graph, it would appear as follows −
+
+Cut Set of a Graph 1
+Similarly there are other cut sets that can disconnect the graph −
+
+E3 = {e9} – Smallest cut set of the graph.
+E4 = {e3, e4, e5}
+Edge Connectivity
+Let ‘G’ be a connected graph. The minimum number of edges whose removal makes ‘G’ disconnected is called edge connectivity of G.
+
+Notation − λ(G)
+
+In other words, the number of edges in a smallest cut set of G is called the edge connectivity of G.
+
+If ‘G’ has a cut edge, then λ(G) is 1. (edge connectivity of G.)
+
+Example
+Take a look at the following graph. By removing two minimum edges, the connected graph becomes disconnected. Hence, its edge connectivity (λ(G)) is 2.
+
+Edge Connectivity
+Here are the four ways to disconnect the graph by removing two edges −
+
+Edge Connectivity 1
+Vertex Connectivity
+Let ‘G’ be a connected graph. The minimum number of vertices whose removal makes ‘G’ either disconnected or reduces ‘G’ in to a trivial graph is called its vertex connectivity.
+
+Notation − K(G)
+
+Example
+In the above graph, removing the vertices ‘e’ and ‘i’ makes the graph disconnected.
+
+Vertex Connectivity
+If G has a cut vertex, then K(G) = 1.
+
+Notation − For any connected graph G,
+
+K(G) ≤ λ(G) ≤ δ(G)
+
+Vertex connectivity (K(G)), edge connectivity (λ(G)), minimum number of degrees of G(δ(G)).
+
+Example
+Calculate λ(G) and K(G) for the following graph −
+
+Vertex Connectivity Example
+Solution
+
+From the graph,
+
+δ(G) = 3
+
+K(G) ≤ λ(G) ≤ δ(G) = 3 (1)
+
+K(G) ≥ 2 (2)
+
+Deleting the edges {d, e} and {b, h}, we can disconnect G.
+
+Therefore,
+
+λ(G) = 2
+
+2 ≤ λ(G) ≤ δ(G) = 2 (3)
+
+From (2) and (3), vertex connectivity K(G) = 2
