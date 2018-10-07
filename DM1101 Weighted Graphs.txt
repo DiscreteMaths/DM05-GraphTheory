@@ -1,8 +1,0 @@
-
-\section*{Weighted Graphs}
-Let G be a weighted graph.
-The maximum spanning tree for G is a spanning tree for G which has a maximum total weight.
-
-For a given G, the maximum spanning tree may not be unique.
-
-It can also be called the maximum connector for G.
